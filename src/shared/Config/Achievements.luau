@@ -7,7 +7,11 @@ return {
 	{ id = "Electrician", name = "Electrician", text = "Insert 25 fuses.", stat = "FusesInserted", goal = 25, embers = 100, badgeId = 0 },
 	{ id = "GoodFriend", name = "Good Friend", text = "Revive 10 teammates.", stat = "Revives", goal = 10, embers = 150, badgeId = 0 },
 	{ id = "Unblinking", name = "Unblinking", text = "Spot The Watcher 20 times.", stat = "WatcherSpotted", goal = 20, embers = 150, badgeId = 0 },
-	{ id = "Untouchable", name = "Untouchable", text = "Complete Chapter 1 without being caught.", stat = "FlawlessClears", goal = 1, embers = 300, badgeId = 0 },
+	{ id = "Untouchable", name = "Untouchable", text = "Complete a chapter without being caught.", stat = "FlawlessClears", goal = 1, embers = 300, badgeId = 0 },
 	{ id = "Archivist", name = "Archivist", text = "Read 30 notes.", stat = "NotesRead", goal = 30, embers = 120, badgeId = 0 },
+	{ id = "LightsOut", name = "Lights Out", text = "Complete Chapter 2.", stat = "Chapter2Clears", goal = 1, embers = 250, badgeId = 0 },
+	{ id = "Cartographer", name = "Cartographer", text = "Find 20 torn map pieces.", stat = "MapPiecesFound", goal = 20, embers = 120, badgeId = 0 },
+	{ id = "StillAsStone", name = "Still as Stone", text = "Hide from The Ranger 10 times.", stat = "HidFromRanger", goal = 10, embers = 150, badgeId = 0 },
+	{ id = "SignalFire", name = "Signal Fire", text = "Fire the flare from the lookout tower.", stat = "FlaresFired", goal = 1, embers = 80, badgeId = 0 },
 	{ id = "Level10", name = "Night Owl", text = "Reach level 10.", stat = "Level", goal = 10, embers = 250, badgeId = 0, reward = "TitleNightOwl" },
 }

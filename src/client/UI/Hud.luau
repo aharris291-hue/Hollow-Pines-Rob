@@ -42,8 +42,10 @@ function Hud.new(gui: ScreenGui, controllers)
 	self.fearLabel = UIKit.text({ Text = "Calm", Font = Theme.FontBold, TextSize = 14, LayoutOrder = 1, Parent = status })
 	self.fearBar, self.fearFill = UIKit.bar({ Size = UDim2.new(1, 0, 0, 12), Color = TIER_COLORS.Calm, LayoutOrder = 2, Parent = status })
 	self.staminaBar, self.staminaFill, self.staminaLabel = UIKit.bar({ Size = UDim2.new(1, 0, 0, 10), Color = Color3.fromRGB(150, 220, 140), LayoutOrder = 3, Parent = status })
-	self.batteryBar, self.batteryFill, self.batteryLabel = UIKit.bar({ Size = UDim2.new(1, 0, 0, 14), Color = Color3.fromRGB(255, 230, 150), LayoutOrder = 4, Text = "Battery", Parent = status })
-	self.teamList = UIKit.new("Frame", { BackgroundTransparency = 1, Size = UDim2.new(1, 0, 0, 0), AutomaticSize = Enum.AutomaticSize.Y, LayoutOrder = 5, Parent = status }, { UIKit.list(nil, 2) })
+	self.batteryBar, self.batteryFill, self.batteryLabel = UIKit.bar({ Size = UDim2.new(1, 0, 0, 14), Color = Color3.fromRGB(255, 230, 150), LayoutOrder = 5, Text = "Battery", Parent = status })
+	self.teamList = UIKit.new("Frame", { BackgroundTransparency = 1, Size = UDim2.new(1, 0, 0, 0), AutomaticSize = Enum.AutomaticSize.Y, LayoutOrder = 6, Parent = status }, { UIKit.list(nil, 2) })
+	-- Chapter 2+: how loud you are, and whether you're hidden from The Ranger.
+	self.noiseLabel = UIKit.text({ Size = UDim2.new(1, 0, 0, 16), TextSize = 13, Font = Theme.FontBold, LayoutOrder = 4, Visible = false, Parent = status })
 	status.Visible = self.isChapter
 
 	-- Objective (top centre)
@@ -113,7 +115,7 @@ function Hud:SetObjective(text: string, marker: Vector3?)
 end
 
 function Hud:Caption(text: string, kind: string?)
-	local color = if kind == "Mimic" then Color3.fromRGB(200, 170, 255) elseif kind == "Radio" then Color3.fromRGB(170, 230, 200) else Theme.Text
+	local color = if kind == "Mimic" then Color3.fromRGB(200, 170, 255) elseif kind == "Radio" then Color3.fromRGB(170, 230, 200) elseif kind == "Hint" then Color3.fromRGB(255, 220, 130) else Theme.Text
 	local label = UIKit.text({
 		Size = UDim2.new(1, 0, 0, 0),
 		AutomaticSize = Enum.AutomaticSize.Y,
@@ -193,6 +195,19 @@ function Hud:_tick()
 	self.fearFill.BackgroundColor3 = TIER_COLORS[tier] or TIER_COLORS.Calm
 	self.fearLabel.Text = "Fear: " .. tier
 	self.staminaFill.Size = UDim2.fromScale((player:GetAttribute("Stamina") or 100) / 100, 1)
+
+	local listening = (ReplicatedStorage:GetAttribute("Chapter") or 1) >= 2
+	self.noiseLabel.Visible = listening
+	if listening then
+		local noise = player:GetAttribute("Noise") or 0
+		if player:GetAttribute("Hidden") then
+			self.noiseLabel.Text = "Hidden"
+			self.noiseLabel.TextColor3 = Color3.fromRGB(150, 220, 140)
+		else
+			self.noiseLabel.Text = if noise >= 2 then "Noise: LOUD" elseif noise == 1 then "Noise: some" else "Noise: quiet"
+			self.noiseLabel.TextColor3 = if noise >= 2 then Theme.Danger elseif noise == 1 then Color3.fromRGB(255, 210, 120) else Theme.Muted
+		end
+	end
 
 	local character = player.Character
 	local tool = character and character:FindFirstChildOfClass("Tool")

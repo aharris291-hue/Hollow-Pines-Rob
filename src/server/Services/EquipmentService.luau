@@ -8,6 +8,7 @@ local Items = require(Shared.Config.Items)
 local Assets = require(Shared.Config.Assets)
 local Net = require(Shared.Util.Net)
 local RateLimit = require(Shared.Util.RateLimit)
+local GameConfig = require(Shared.Config.GameConfig)
 local EventBus = require(script.Parent.Parent.EventBus)
 
 local EquipmentService = {}
@@ -19,6 +20,7 @@ local enabled = false -- tools are handed out once the emergency kit is found
 local cooldowns: { [Player]: { [string]: number } } = {}
 local toggleLimiter = RateLimit.new(0.2)
 local tonicUsed: { [Player]: boolean } = {}
+local storyItems: { [Player]: { [string]: boolean } } = {} -- re-given after a respawn
 
 local function lightOf(tool: Tool): Light?
 	local handle = tool:FindFirstChild("Handle")
@@ -115,6 +117,8 @@ local function buildTool(player: Player, itemId: string): Tool?
 		tool:SetAttribute("MaxBattery", item.battery)
 	elseif itemId == "Walkie" then
 		makeHandle(Vector3.new(0.5, 1.2, 0.3), Color3.fromRGB(30, 30, 30)).Parent = tool
+	elseif itemId == "Whistle" then
+		makeHandle(Vector3.new(0.3, 0.3, 0.9), Color3.fromRGB(200, 170, 60)).Parent = tool
 	elseif itemId == "Camera" then
 		makeHandle(Vector3.new(1, 0.7, 0.6), Color3.fromRGB(220, 220, 210)).Parent = tool
 	elseif itemId == "CalmTonic" then
@@ -147,6 +151,19 @@ function EquipmentService:_activate(player: Player, tool: Tool, itemId: string)
 		if root then
 			Net.Event("WalkiePing"):FireAllClients(player, root.Position)
 			EventBus.Fire("WalkiePing", player)
+			if services.NoiseService then
+				services.NoiseService:Emit(root.Position, GameConfig.Noise.Walkie, player)
+			end
+		end
+	elseif itemId == "Whistle" then
+		if onCooldown(player, itemId, item.cooldown) then
+			return
+		end
+		local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+		if root and services.NoiseService then
+			services.NoiseService:Emit(root.Position, GameConfig.Noise.Whistle, player)
+			EventBus.Fire("WhistleBlown", player)
+			Net.Event("Caption"):FireAllClients("[" .. player.DisplayName .. " blows a sharp whistle]", "Sound")
 		end
 	elseif itemId == "Camera" then
 		if onCooldown(player, itemId, item.cooldown) then
@@ -194,6 +211,7 @@ function EquipmentService:Init(registry)
 	Players.PlayerRemoving:Connect(function(player)
 		cooldowns[player] = nil
 		tonicUsed[player] = nil
+		storyItems[player] = nil
 	end)
 end
 
@@ -222,7 +240,27 @@ function EquipmentService:GiveLoadout(player: Player)
 			end
 		end
 	end
+	for itemId in pairs(storyItems[player] or {}) do
+		local tool = buildTool(player, itemId)
+		if tool then
+			tool.Parent = backpack
+		end
+	end
 	self:ApplyCosmetics(player)
+end
+
+-- Story items (like the whistle) are extra tools on top of the loadout.
+function EquipmentService:GiveStoryItem(player: Player, itemId: string)
+	local backpack = player:FindFirstChildOfClass("Backpack")
+	if not backpack or findTool(player, itemId) then
+		return
+	end
+	local tool = buildTool(player, itemId)
+	if tool then
+		tool.Parent = backpack
+	end
+	storyItems[player] = storyItems[player] or {}
+	storyItems[player][itemId] = true
 end
 
 function EquipmentService:EnableLoadouts()
@@ -235,6 +273,7 @@ end
 function EquipmentService:ResetRun()
 	enabled = false
 	table.clear(tonicUsed)
+	table.clear(storyItems)
 	for _, player in Players:GetPlayers() do
 		local backpack = player:FindFirstChildOfClass("Backpack")
 		if backpack then

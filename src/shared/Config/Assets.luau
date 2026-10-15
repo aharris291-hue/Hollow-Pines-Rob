@@ -17,6 +17,10 @@ return {
 		CameraFlash = 0,
 		UIClick = 0,
 		Reward = 0,
+		Whistle = 0,
+		Flare = 0,
+		Helicopter = 0,
+		Padlock = 0,
 	},
 	Images = {
 		Logo = 0,

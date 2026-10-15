@@ -10,6 +10,7 @@ GameConfig.Version = "0.1.0"
 GameConfig.Places = {
 	Lobby = 0,
 	Chapter1 = 0,
+	Chapter2 = 0,
 }
 
 GameConfig.Party = {
@@ -65,6 +66,25 @@ GameConfig.Chapter1 = {
 	ChaseTimeLimit = 120,
 	EndingPhotoHold = 8,
 	ReturnToLobbyDelay = 25,
+}
+
+GameConfig.Chapter2 = {
+	IntroLength = 10,
+	MapPieceCount = 4,
+	HelicopterDelay = 45, -- seconds after the flare until the landing zone opens
+	EndingPhotoHold = 8,
+	ReturnToLobbyDelay = 25,
+}
+
+-- How far each kind of noise carries (studs). The Ranger hears anything within range.
+GameConfig.Noise = {
+	Sprint = 40,
+	Splash = 26, -- moving through flood water, even walking
+	SplashSprint = 55,
+	Walkie = 60,
+	Whistle = 90,
+	Flare = 2000,
+	MemorySeconds = 4, -- how long a noise stays interesting
 }
 
 GameConfig.Rewards = {

@@ -51,6 +51,15 @@ Items.Equipment = {
 		unlockLevel = 3,
 		fearReduction = 40,
 	},
+	Whistle = {
+		id = "Whistle",
+		name = "Ranger's Whistle",
+		description = "Blow it to lure The Ranger to where you stand. Found in Chapter 2.",
+		slot = "Story", -- handed out by the story, never equipped from the menu
+		storyItem = true,
+		unlockLevel = 0,
+		cooldown = 12,
+	},
 }
 
 Items.DefaultLoadout = { Light = "Flashlight", Tool = "Walkie" }

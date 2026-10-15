@@ -13,7 +13,7 @@ local services
 local function unlockForLevel(data, level: number): { string }
 	local unlocked = {}
 	for id, item in Items.Equipment do
-		if item.unlockLevel <= level and not data.Owned[id] then
+		if not item.storyItem and item.unlockLevel <= level and not data.Owned[id] then
 			data.Owned[id] = true
 			table.insert(unlocked, item.name)
 		end

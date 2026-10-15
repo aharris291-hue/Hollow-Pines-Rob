@@ -185,6 +185,9 @@ function Menus:_Loadout(profile)
 		return item.unlockLevel
 	end) do
 		local item = Items.Equipment[id]
+		if item.storyItem then
+			continue
+		end
 		local owned = profile.Owned[id]
 		local equipped = profile.Loadout[item.slot] == id
 		local button = if equipped then "Equipped" elseif owned then "Equip" else "Level " .. item.unlockLevel

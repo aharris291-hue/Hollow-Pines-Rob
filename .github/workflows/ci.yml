@@ -19,3 +19,5 @@ jobs:
           rojo build default.project.json -o HollowPines.rbxl
           rojo build lobby.project.json -o Lobby.rbxl
           rojo build chapter1.project.json -o Chapter1.rbxl
+          rojo build chapter2.project.json -o Chapter2.rbxl
+          rojo build solo-chapter2.project.json -o SoloChapter2.rbxl

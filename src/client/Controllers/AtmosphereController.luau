@@ -110,6 +110,38 @@ local EFFECTS = {
 	ChaseEnd = function()
 		controllers.AudioController:StopLoop("Chase")
 	end,
+	RangerSpotted = function(payload)
+		controllers.AudioController:Play(payload.soundId, 1)
+		controllers.FearController:Shake(0.3, 0.4)
+		flash(Color3.fromRGB(255, 200, 120), 0.25, 0.5)
+		soundCaption("[A lantern swings towards you. Heavy boots, closer.]")
+	end,
+	Padlock = function(payload)
+		controllers.AudioController:Play(payload.soundId, 0.8)
+		soundCaption("[The padlock clicks open]")
+	end,
+	Flare = function(payload)
+		controllers.AudioController:Play(payload.soundId, 1)
+		soundCaption("[A flare whooshes into the sky and bursts]")
+		if controllers.DataController:Setting("ReducedFlashing") then
+			return
+		end
+		-- The whole sky glows red while the flare burns.
+		local glow = Instance.new("ColorCorrectionEffect")
+		glow.Name = "FlareGlow"
+		glow.TintColor = Color3.fromRGB(255, 170, 160)
+		glow.Brightness = 0.08
+		glow.Parent = Lighting
+		TweenService:Create(glow, TweenInfo.new(14, Enum.EasingStyle.Sine), { TintColor = Color3.new(1, 1, 1), Brightness = 0 }):Play()
+		task.delay(14, function()
+			glow:Destroy()
+		end)
+	end,
+	Helicopter = function(payload)
+		controllers.AudioController:Play(payload.soundId, 1)
+		controllers.FearController:Shake(0.15, 2)
+		soundCaption("[Helicopter rotors, getting louder]")
+	end,
 }
 
 local function showPing(from: Player, position: Vector3)

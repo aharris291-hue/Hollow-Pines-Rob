@@ -6,6 +6,7 @@ local Players = game:GetService("Players")
 local Shared = game:GetService("ReplicatedStorage"):WaitForChild("Shared")
 local Quests = require(Shared.Config.Quests)
 local QuestLogic = require(Shared.Util.QuestLogic)
+local ChapterUnlock = require(Shared.Util.ChapterUnlock)
 local Net = require(Shared.Util.Net)
 local EventBus = require(script.Parent.Parent.EventBus)
 
@@ -21,7 +22,14 @@ local function refreshDaily(player: Player)
 		end
 		data.Quests.Day = today
 		data.Quests.Active = {}
-		for _, questId in QuestLogic.pickDaily(Quests.Pool, Quests.DailyCount, today) do
+		-- Quests for a chapter the player can't play yet are left out of the roll.
+		local pool = {}
+		for _, quest in Quests.Pool do
+			if not quest.chapter or quest.chapter == 1 or ChapterUnlock.isCleared(data, quest.chapter - 1) then
+				table.insert(pool, quest)
+			end
+		end
+		for _, questId in QuestLogic.pickDaily(pool, Quests.DailyCount, today) do
 			data.Quests.Active[questId] = { progress = 0, claimed = false }
 		end
 	end)

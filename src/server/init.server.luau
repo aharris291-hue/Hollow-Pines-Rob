@@ -24,6 +24,8 @@ local function resolveRole(): string
 		return "Lobby"
 	elseif GameConfig.Places.Chapter1 ~= 0 and game.PlaceId == GameConfig.Places.Chapter1 then
 		return "Chapter1"
+	elseif GameConfig.Places.Chapter2 ~= 0 and game.PlaceId == GameConfig.Places.Chapter2 then
+		return "Chapter2"
 	end
 	-- Unpublished or Studio: the Rojo project decides (default.project.json = Solo).
 	return ReplicatedStorage:GetAttribute("PlaceRole") or "Solo"
@@ -46,8 +48,9 @@ local COMMON = {
 
 local BY_ROLE = {
 	Lobby = { "LobbyService", "MatchmakingService" },
-	Chapter1 = { "PlayerStateService", "EquipmentService", "FearService", "CreatureService", "OnboardingService", "ChapterService" },
+	Chapter1 = { "PlayerStateService", "EquipmentService", "NoiseService", "FearService", "CreatureService", "OnboardingService", "ChapterService" },
 }
+BY_ROLE.Chapter2 = BY_ROLE.Chapter1
 BY_ROLE.Solo = BY_ROLE.Chapter1
 
 local servicesFolder = script:WaitForChild("Services")

@@ -62,7 +62,7 @@ function UIController:Start()
 		if name == "Note" then
 			self.panels:Note(data.title, data.body)
 		elseif name == "Radio" then
-			self.panels:Radio(data.digits)
+			self.panels:Radio(data.digits, data.title, data.subtitle)
 		elseif name == "Close" then
 			self.panels:Close()
 		end

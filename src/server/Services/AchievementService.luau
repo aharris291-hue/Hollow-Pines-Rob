@@ -21,6 +21,10 @@ local EVENT_STATS = {
 	WatcherSpotted = "WatcherSpotted",
 	NoteRead = "NotesRead",
 	Caught = "TimesCaught",
+	Chapter2Completed = "Chapter2Clears",
+	MapPieceFound = "MapPiecesFound",
+	HidFromRanger = "HidFromRanger",
+	FlareFired = "FlaresFired",
 }
 
 local function check(player: Player)

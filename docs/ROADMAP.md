@@ -12,11 +12,11 @@ Core systems, Chapter 1 greybox, lobby, monetization, saves, accessibility, test
 - Party invites (friends join the same queue) via `SocialService`.
 - Soft launch, watch retention and chase difficulty.
 
-## Phase 3: Chapter 2, "The Ranger"
+## Phase 3: Chapter 2, "The Ranger" (built, greybox)
 
-- The Ranger becomes active: patrols, hunts by sound (sprinting and walkie use are loud).
-- New area: the flooded campground and the lookout tower.
-- New equipment: whistle (distraction), map pieces as collectibles.
+- Done: The Ranger patrols with a lantern and hunts by sound (sprinting, splashing, walkie and whistle are loud). He can't reach players still in a tent, in the lit office or up the tower.
+- Done: the flooded campground, boathouse and lookout tower; whistle story item; torn map pieces; lobby chapter select.
+- Next: art pass for the camp and The Ranger, Ranger voice lines and footsteps, tuning hearing ranges from playtests.
 
 ## Phase 4: Chapter 3, "Voices"
 

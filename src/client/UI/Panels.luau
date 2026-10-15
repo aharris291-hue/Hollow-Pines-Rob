@@ -1,11 +1,13 @@
 -- Modal panels: notes, the radio dial, the "caught" overlay, chapter results and
--- the lobby Play button.
+-- the lobby chapter select.
 
 local MarketplaceService = game:GetService("MarketplaceService")
 local Players = game:GetService("Players")
 
 local Shared = game:GetService("ReplicatedStorage"):WaitForChild("Shared")
 local Monetization = require(Shared.Config.Monetization)
+local Chapters = require(Shared.Config.Chapters)
+local ChapterUnlock = require(Shared.Util.ChapterUnlock)
 local Net = require(Shared.Util.Net)
 local UIKit = require(script.Parent.UIKit)
 
@@ -47,10 +49,11 @@ function Panels:Note(title: string, body: string)
 	end)
 end
 
-function Panels:Radio(digits: number)
-	local frame = self:_modal(380, 260)
-	UIKit.text({ Size = UDim2.new(1, 0, 0, 26), Font = Theme.FontBold, TextSize = 20, TextXAlignment = Enum.TextXAlignment.Center, Text = "📻 Emergency radio", Parent = frame })
-	UIKit.text({ Position = UDim2.fromOffset(0, 28), Size = UDim2.new(1, 0, 0, 20), TextSize = 14, TextColor3 = Theme.Muted, TextXAlignment = Enum.TextXAlignment.Center, Text = "Set the channel from the check-in sheets", Parent = frame })
+-- A row of number dials (the radio channel, the boathouse padlock...).
+function Panels:Radio(digits: number, title: string?, subtitle: string?)
+	local frame = self:_modal(math.max(380, digits * 70 + 60), 260)
+	UIKit.text({ Size = UDim2.new(1, 0, 0, 26), Font = Theme.FontBold, TextSize = 20, TextXAlignment = Enum.TextXAlignment.Center, Text = title or "📻 Emergency radio", Parent = frame })
+	UIKit.text({ Position = UDim2.fromOffset(0, 28), Size = UDim2.new(1, 0, 0, 20), TextSize = 14, TextColor3 = Theme.Muted, TextXAlignment = Enum.TextXAlignment.Center, Text = subtitle or "Set the channel from the check-in sheets", Parent = frame })
 
 	local values = table.create(digits, 0)
 	local row = UIKit.new("Frame", { AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.new(0.5, 0, 0, 60), Size = UDim2.fromOffset(digits * 70, 120), BackgroundTransparency = 1, Parent = frame }, { UIKit.list(Enum.FillDirection.Horizontal, 10) })
@@ -69,7 +72,7 @@ function Panels:Radio(digits: number)
 		end)
 	end
 
-	UIKit.button("Transmit", { AnchorPoint = Vector2.new(0, 1), Position = UDim2.new(0, 0, 1, 0), BackgroundColor3 = Color3.fromRGB(60, 110, 70) }, function()
+	UIKit.button(if title and string.find(title, "padlock") then "Unlock" else "Transmit", { AnchorPoint = Vector2.new(0, 1), Position = UDim2.new(0, 0, 1, 0), BackgroundColor3 = Color3.fromRGB(60, 110, 70) }, function()
 		local parts = {}
 		for _, value in values do
 			table.insert(parts, tostring(value))
@@ -120,7 +123,7 @@ end
 
 function Panels:Results(result)
 	local frame = self:_modal(420, 320)
-	UIKit.text({ Size = UDim2.new(1, 0, 0, 34), Font = Theme.Story, TextSize = 28, TextXAlignment = Enum.TextXAlignment.Center, TextColor3 = Theme.Accent, Text = "Chapter 1 complete", Parent = frame })
+	UIKit.text({ Size = UDim2.new(1, 0, 0, 34), Font = Theme.Story, TextSize = 28, TextXAlignment = Enum.TextXAlignment.Center, TextColor3 = Theme.Accent, Text = string.format("Chapter %d complete", result.chapter or 1), Parent = frame })
 	local minutes = math.floor(result.seconds / 60)
 	local lines = {
 		string.format("Time: %d:%02d", minutes, result.seconds % 60),
@@ -134,7 +137,7 @@ function Panels:Results(result)
 		table.insert(lines, "First escape bonus!")
 	end
 	UIKit.text({ Position = UDim2.fromOffset(0, 44), Size = UDim2.new(1, 0, 0, 150), TextSize = 18, TextXAlignment = Enum.TextXAlignment.Center, TextYAlignment = Enum.TextYAlignment.Top, Text = table.concat(lines, "\n"), Parent = frame })
-	UIKit.text({ Position = UDim2.fromOffset(0, 200), Size = UDim2.new(1, 0, 0, 40), TextSize = 14, TextColor3 = Theme.Muted, TextXAlignment = Enum.TextXAlignment.Center, Text = "Chapter 2 is coming soon. The forest isn't finished with you.", Parent = frame })
+	UIKit.text({ Position = UDim2.fromOffset(0, 200), Size = UDim2.new(1, 0, 0, 40), TextSize = 14, TextColor3 = Theme.Muted, TextXAlignment = Enum.TextXAlignment.Center, Text = if (result.chapter or 1) < #Chapters then string.format("Chapter %d is unlocked. Pick it in the lobby.", (result.chapter or 1) + 1) else "More chapters are coming. The forest isn't finished with you.", Parent = frame })
 	if result.canReturn then
 		UIKit.button("Back to camp", { AnchorPoint = Vector2.new(0.5, 1), Position = UDim2.new(0.5, 0, 1, 0), Size = UDim2.fromOffset(180, 38), Parent = frame }, function()
 			Net.Event("ReturnToLobby"):FireServer()
@@ -145,23 +148,84 @@ function Panels:Results(result)
 end
 
 function Panels:Lobby()
-	local frame = UIKit.panel({ Name = "Play", AnchorPoint = Vector2.new(0.5, 1), Position = UDim2.new(0.5, 0, 1, -24), Size = UDim2.fromOffset(360, 120), Parent = self.gui })
+	local frame = UIKit.panel({ Name = "Play", AnchorPoint = Vector2.new(0.5, 1), Position = UDim2.new(0.5, 0, 1, -24), Size = UDim2.fromOffset(440, 170), Parent = self.gui })
 	UIKit.padding(12).Parent = frame
-	UIKit.text({ Size = UDim2.new(1, 0, 0, 26), Font = Theme.Story, TextSize = 22, TextXAlignment = Enum.TextXAlignment.Center, Text = "Chapter 1: The Storm", Parent = frame })
-	local status = UIKit.text({ Position = UDim2.fromOffset(0, 30), Size = UDim2.new(1, 0, 0, 20), TextSize = 14, TextColor3 = Theme.Muted, TextXAlignment = Enum.TextXAlignment.Center, Text = "Up to 6 players", Parent = frame })
-	local inQueue = false
-	local button = UIKit.button("PLAY", { AnchorPoint = Vector2.new(0.5, 1), Position = UDim2.new(0.5, 0, 1, 0), Size = UDim2.fromOffset(200, 42), BackgroundColor3 = Color3.fromRGB(120, 80, 40), TextSize = 20, Parent = frame }, function()
-		Net.Event(if inQueue then "LeaveQueue" else "JoinQueue"):FireServer()
-	end)
-	Net.Event("QueueUpdated").OnClientEvent:Connect(function(queue)
-		inQueue = queue.inQueue
-		button.Text = if inQueue then "LEAVE" else "PLAY"
-		if #queue.names > 0 then
-			status.Text = string.format("%d/%d boarding · leaving in %ds", #queue.names, queue.max, queue.countdown or 0)
+	local title = UIKit.text({ Position = UDim2.fromOffset(40, 0), Size = UDim2.new(1, -80, 0, 26), Font = Theme.Story, TextSize = 22, TextXAlignment = Enum.TextXAlignment.Center, Parent = frame })
+	local blurb = UIKit.text({ Position = UDim2.fromOffset(40, 28), Size = UDim2.new(1, -80, 0, 36), TextSize = 14, TextWrapped = true, TextColor3 = Theme.Muted, TextXAlignment = Enum.TextXAlignment.Center, Parent = frame })
+	local status = UIKit.text({ Position = UDim2.fromOffset(0, 68), Size = UDim2.new(1, 0, 0, 20), TextSize = 14, TextColor3 = Theme.Muted, TextXAlignment = Enum.TextXAlignment.Center, Text = "Up to 6 players", Parent = frame })
+
+	local selected = 1
+	local queued: number? = nil
+	local lastQueue = nil
+	local autoPicked = false
+	local button
+
+	local function chapter()
+		return Chapters[selected]
+	end
+	local function unlocked(): boolean
+		return ChapterUnlock.isUnlocked(self.controllers.DataController.Profile, chapter())
+	end
+	local function refresh()
+		local current = chapter()
+		local open = unlocked()
+		title.Text = string.format("%sChapter %d: %s", if open then "" else "🔒 ", current.id, current.name)
+		blurb.Text = if open then current.blurb else string.format("Escape Chapter %d to unlock.", current.requires)
+		if queued == current.id then
+			button.Text = "LEAVE"
+		elseif queued then
+			button.Text = "SWITCH"
 		else
-			status.Text = "Up to " .. queue.max .. " players"
+			button.Text = if open then "PLAY" else "LOCKED"
+		end
+		button.AutoButtonColor = open
+		button.BackgroundColor3 = if open then Color3.fromRGB(120, 80, 40) else Color3.fromRGB(70, 70, 76)
+		local info = lastQueue and lastQueue.queues and lastQueue.queues[current.id]
+		if info and #info.names > 0 then
+			status.Text = string.format("%d/%d boarding · leaving in %ds", #info.names, lastQueue.max, info.countdown or 0)
+		else
+			status.Text = "Up to " .. (if lastQueue then lastQueue.max else 6) .. " players"
+		end
+	end
+
+	button = UIKit.button("PLAY", { AnchorPoint = Vector2.new(0.5, 1), Position = UDim2.new(0.5, 0, 1, 0), Size = UDim2.fromOffset(200, 42), BackgroundColor3 = Color3.fromRGB(120, 80, 40), TextSize = 20, Parent = frame }, function()
+		if queued == chapter().id then
+			Net.Event("LeaveQueue"):FireServer()
+		elseif unlocked() then
+			Net.Event("JoinQueue"):FireServer(chapter().id)
 		end
 	end)
+	local function step(delta: number)
+		selected = (selected - 1 + delta) % #Chapters + 1
+		refresh()
+	end
+	if #Chapters > 1 then
+		UIKit.button("◀", { Position = UDim2.fromOffset(0, 8), Size = UDim2.fromOffset(36, 48), Parent = frame }, function()
+			step(-1)
+		end)
+		UIKit.button("▶", { AnchorPoint = Vector2.new(1, 0), Position = UDim2.new(1, 0, 0, 8), Size = UDim2.fromOffset(36, 48), Parent = frame }, function()
+			step(1)
+		end)
+	end
+
+	Net.Event("QueueUpdated").OnClientEvent:Connect(function(queue)
+		lastQueue = queue
+		queued = if queue.inQueue then queue.chapter else nil
+		refresh()
+	end)
+	self.controllers.DataController:Observe(function(profile)
+		-- Open on the newest chapter this player can play.
+		if not autoPicked and not queued then
+			autoPicked = true
+			for index, entry in Chapters do
+				if ChapterUnlock.isUnlocked(profile, entry) then
+					selected = index
+				end
+			end
+		end
+		refresh()
+	end)
+	refresh()
 end
 
 return Panels
