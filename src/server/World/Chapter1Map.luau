@@ -107,7 +107,7 @@ local function buildBus(map: Instance, refs)
 	Builder.label(crate, "EMERGENCY", Enum.NormalId.Front)
 	refs.KitCrate = crate
 
-	local busNote = Builder.part(bus, "ItineraryNote", Vector3.new(1.4, 0.05, 1.8), at(3, 2.75, -9), Color3.fromRGB(235, 230, 210), Enum.Material.Paper)
+	local busNote = Builder.part(bus, "ItineraryNote", Vector3.new(1.4, 0.05, 1.8), at(3, 2.75, -9), Color3.fromRGB(235, 230, 210), Enum.Material.SmoothPlastic)
 	refs.BusNote = busNote
 
 	local cabinLamp = Builder.part(bus, "CabinLamp", Vector3.new(1, 0.3, 3), at(0, 8.9, 0), Color3.fromRGB(255, 220, 150), Enum.Material.Neon)
@@ -180,14 +180,14 @@ local function buildStation(map: Instance, refs)
 	for _, offset in { Vector3.new(-3.5, 0, -2), Vector3.new(3.5, 0, -2), Vector3.new(-3.5, 0, 2), Vector3.new(3.5, 0, 2) } do
 		Builder.part(station, "TableLeg", Vector3.new(0.5, 2.5, 0.5), at(offset.X, 1.5 + 0.25, 2 + offset.Z), WOOD, Enum.Material.Wood)
 	end
-	local trailMap = Builder.part(station, "TrailMap", Vector3.new(6, 0.06, 3.6), at(0, 3.28, 2), Color3.fromRGB(220, 205, 170), Enum.Material.Paper)
+	local trailMap = Builder.part(station, "TrailMap", Vector3.new(6, 0.06, 3.6), at(0, 3.28, 2), Color3.fromRGB(220, 205, 170), Enum.Material.SmoothPlastic)
 	Builder.label(trailMap, "OLD SERVICE ROAD ➜ BRIDGE ➜ ROUTE 9", Enum.NormalId.Top, Color3.fromRGB(70, 40, 30))
 
 	-- Clue notes for the radio puzzle, one per wall so the team has to split up.
 	refs.ClueNotes = {
-		Builder.part(station, "ClueNote", Vector3.new(2, 2.6, 0.1), at(-6, 6, -11.9), Color3.fromRGB(235, 228, 205), Enum.Material.Paper),
-		Builder.part(station, "ClueNote", Vector3.new(2, 2.6, 0.1), at(8, 6, 11.9), Color3.fromRGB(235, 228, 205), Enum.Material.Paper),
-		Builder.part(station, "ClueNote", Vector3.new(0.1, 2.6, 2), at(16.9, 6, -6), Color3.fromRGB(235, 228, 205), Enum.Material.Paper),
+		Builder.part(station, "ClueNote", Vector3.new(2, 2.6, 0.1), at(-6, 6, -11.9), Color3.fromRGB(235, 228, 205), Enum.Material.SmoothPlastic),
+		Builder.part(station, "ClueNote", Vector3.new(2, 2.6, 0.1), at(8, 6, 11.9), Color3.fromRGB(235, 228, 205), Enum.Material.SmoothPlastic),
+		Builder.part(station, "ClueNote", Vector3.new(0.1, 2.6, 2), at(16.9, 6, -6), Color3.fromRGB(235, 228, 205), Enum.Material.SmoothPlastic),
 	}
 	refs.RangerLog = Builder.part(station, "RangerLog", Vector3.new(1.6, 0.2, 1.2), at(-9.5, 4.1, -10), Color3.fromRGB(90, 60, 40), Enum.Material.Leather)
 
@@ -270,7 +270,7 @@ local function buildBounds(map: Instance)
 end
 
 function Chapter1Map.Build()
-	local refs = {}
+	local refs: any = {}
 	local map = Instance.new("Model")
 	map.Name = "Chapter1"
 	refs.Map = map

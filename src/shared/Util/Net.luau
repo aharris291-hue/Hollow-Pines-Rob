@@ -40,37 +40,39 @@ local FUNCTIONS = {
 	"GetShopState",
 }
 
-local folder: Folder
+local folder: Folder? = nil
 
 local function getFolder(): Folder
 	if folder then
 		return folder
 	end
+	local found: Folder
 	if RunService:IsServer() then
-		folder = ReplicatedStorage:FindFirstChild("Remotes") :: Folder
-		if not folder then
-			folder = Instance.new("Folder")
-			folder.Name = "Remotes"
-			folder.Parent = ReplicatedStorage
+		found = ReplicatedStorage:FindFirstChild("Remotes") :: Folder
+		if not found then
+			found = Instance.new("Folder")
+			found.Name = "Remotes"
+			found.Parent = ReplicatedStorage
 		end
 		for _, name in EVENTS do
-			if not folder:FindFirstChild(name) then
+			if not found:FindFirstChild(name) then
 				local remote = Instance.new("RemoteEvent")
 				remote.Name = name
-				remote.Parent = folder
+				remote.Parent = found
 			end
 		end
 		for _, name in FUNCTIONS do
-			if not folder:FindFirstChild(name) then
+			if not found:FindFirstChild(name) then
 				local remote = Instance.new("RemoteFunction")
 				remote.Name = name
-				remote.Parent = folder
+				remote.Parent = found
 			end
 		end
 	else
-		folder = ReplicatedStorage:WaitForChild("Remotes") :: Folder
+		found = ReplicatedStorage:WaitForChild("Remotes") :: Folder
 	end
-	return folder
+	folder = found
+	return found
 end
 
 function Net.Event(name: string): RemoteEvent
