@@ -12,6 +12,7 @@ GameConfig.Places = {
 	Chapter1 = 0,
 	Chapter2 = 0,
 	Chapter3 = 0,
+	Chapter4 = 0,
 }
 
 GameConfig.Party = {
@@ -75,6 +76,13 @@ GameConfig.Chapter3 = {
 	FerryDelay = 20, -- seconds after the signal until the ferry reaches the dock
 	EndingPhotoHold = 8,
 	ReturnToLobbyDelay = 25,
+}
+
+GameConfig.Chapter4 = {
+	IntroLength = 10,
+	LostCount = 3, -- the driver, the ranger and the pilot
+	EndingPhotoHold = 10,
+	ReturnToLobbyDelay = 30,
 }
 
 -- The secret handshake (Chapter 3): how players prove they are real.

@@ -31,6 +31,8 @@ local HINTS = {
 	Whistle = "Press 3, or tap the whistle, to blow it. The Ranger will go to the sound, away from your friends.",
 	Handshake = "Press H, or tap Shake, next to someone to offer the secret handshake. Real friends shake back. The Mimic can't.",
 	Together = "The Mimic only catches people who are alone. Stay close to your friends.",
+	Wake = "Hold your light, switch it on (F), then hold E next to a sleeping figure to wake them.",
+	Gaze = "Glowing streaks show where its eye is looking. Hide behind a standing stone when they sweep towards you.",
 }
 
 local services

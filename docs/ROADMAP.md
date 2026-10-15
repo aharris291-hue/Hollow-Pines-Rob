@@ -24,9 +24,15 @@ Core systems, Chapter 1 greybox, lobby, monetization, saves, accessibility, test
 - Done: the secret handshake to prove you are real; Millbrook village, Hale's tapes, the three signals and the ferry finale.
 - Next: walking/idle animations for the copy (it slides on purpose for now), voice lines, a fog art pass.
 
-## Phase 5: Chapter 4, "The Hollow"
+## Phase 5: Chapter 4, "The Hollow" (built, greybox)
 
-- The Hollow One and the truth about the forest. Finale.
+- Done: The Hollow One's sweeping gaze and stone cover, waking the lost, the stone fires, the last chase and the ending.
+- Next: art pass for the Hollow and the groves, an ending cutscene, a credits screen.
+
+## After the story
+
+- Phase 2's polish list now covers all four chapters: art, audio (`Assets.luau`), animations.
+- Publish all five places (docs/DEPLOYMENT.md) and soft launch.
 
 ## Live service
 

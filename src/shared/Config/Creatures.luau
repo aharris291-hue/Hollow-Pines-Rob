@@ -61,8 +61,17 @@ return {
 		pauseAfterCatch = 4,
 		revealStun = 4, -- in the finale a handshake only stuns it
 	},
+	-- The heart of the forest (Chapter 4). It never moves; its gaze sweeps the
+	-- clearing like a lighthouse beam. Stone cover blocks it.
 	HollowOne = {
 		name = "The Hollow One",
 		activeFromChapter = 4,
+		gazeRange = 125, -- studs from its eye
+		gazeHalfAngle = 16, -- degrees either side of where it is looking
+		sweepSpeed = 22, -- degrees per second
+		angrySweepSpeed = 40, -- after the braziers are lit
+		exposureToCatch = 1.6, -- seconds in the beam before it pulls you down
+		exposureFall = 1.5, -- exposure lost per second out of the beam
+		fearPerSecond = 22,
 	},
 }

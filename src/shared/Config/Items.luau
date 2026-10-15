@@ -73,6 +73,7 @@ Items.Cosmetics = {
 	TitleSurvivor = { id = "TitleSurvivor", name = "Survivor", kind = "Title", price = 0, achievement = "SurviveTheStorm" },
 	TitleDetective = { id = "TitleDetective", name = "Detective", kind = "Title", price = 600 },
 	TitleNightOwl = { id = "TitleNightOwl", name = "Night Owl", kind = "Title", price = 0, achievement = "Level10" },
+	TitleHomeAgain = { id = "TitleHomeAgain", name = "Hollow Hero", kind = "Title", price = 0, achievement = "TheEnd" },
 }
 
 Items.Pets = {

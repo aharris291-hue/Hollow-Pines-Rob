@@ -13,6 +13,9 @@ local Watcher = require(Creatures.Watcher)
 local Mimic = require(Creatures.Mimic)
 local Ranger = require(Creatures.Ranger)
 local Copy = require(Creatures.Copy)
+local HollowOne = require(Creatures.HollowOne)
+
+local Creatures_HollowOne = require(Shared.Config.Creatures).HollowOne
 
 local CreatureService = {}
 
@@ -110,7 +113,31 @@ function CreatureService:Spawn(chapterId: number?)
 			end,
 		})
 	end
-	if (chapterId or 1) >= 3 then
+	if (chapterId or 1) >= 4 then
+		local refs = services.ChapterService:GetRefs()
+		local warned: { [Player]: boolean } = {}
+		self.hollow = HollowOne.new({
+			getTargets = activeTargets,
+			isSafe = function(position)
+				return services.ChapterService:IsInSafeZone(position)
+			end,
+			onSeen = function(player, dt)
+				services.FearService:Spike(player, Creatures_HollowOne.fearPerSecond * dt)
+				if not warned[player] then
+					warned[player] = true
+					EventBus.Fire("GazeSeen", player)
+					Net.Event("ScreenEffect"):FireClient(player, "GazeSting", { soundId = Assets.Sounds.WatcherSting })
+					task.delay(6, function()
+						warned[player] = nil
+					end)
+				end
+			end,
+			onCatch = function(player)
+				services.PlayerStateService:Down(player, "The Hollow One")
+			end,
+		}, refs.HollowCenter)
+	end
+	if (chapterId or 1) == 3 then
 		local refs = services.ChapterService:GetRefs()
 		self.copy = Copy.new({
 			getTargets = activeTargets,
@@ -143,7 +170,7 @@ function CreatureService:Spawn(chapterId: number?)
 end
 
 function CreatureService:Despawn()
-	for _, key in { "watcher", "mimic", "ranger", "copy" } do
+	for _, key in { "watcher", "mimic", "ranger", "copy", "hollow" } do
 		if self[key] then
 			self[key]:Destroy()
 			self[key] = nil
@@ -154,7 +181,7 @@ end
 -- Distance from a position to the nearest visible threat, for the fear system.
 function CreatureService:ThreatDistance(position: Vector3): number?
 	local nearest = nil
-	for _, creature in { self.watcher, self.ranger, self.copy } do
+	for _, creature in { self.watcher, self.ranger, self.copy, self.hollow } do
 		local creaturePosition = creature and creature:Position()
 		if creaturePosition then
 			local distance = (creaturePosition - position).Magnitude
@@ -174,7 +201,7 @@ function CreatureService:Flash(player: Player, stunTime: number): boolean
 		return false
 	end
 	local look = looks[player] or root.CFrame.LookVector
-	for _, creature in { self.watcher, self.ranger, self.copy } do
+	for _, creature in { self.watcher, self.ranger, self.copy, self.hollow } do
 		local creaturePosition = creature and creature:Position()
 		if creaturePosition then
 			local offset = creaturePosition - root.Position
@@ -195,7 +222,7 @@ function CreatureService:Start()
 		local now = os.clock()
 		local dt = now - last
 		last = now
-		for _, key in { "watcher", "mimic", "ranger", "copy" } do
+		for _, key in { "watcher", "mimic", "ranger", "copy", "hollow" } do
 			local creature = self[key]
 			if creature then
 				local ok, err = pcall(creature.Update, creature, dt)

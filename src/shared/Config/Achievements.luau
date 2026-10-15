@@ -16,5 +16,8 @@ return {
 	{ id = "FogLifter", name = "Fog Lifter", text = "Complete Chapter 3.", stat = "Chapter3Clears", goal = 1, embers = 300, badgeId = 0 },
 	{ id = "TrustNoOne", name = "Trust No One", text = "Expose The Mimic with a handshake 10 times.", stat = "MimicsRevealed", goal = 10, embers = 180, badgeId = 0 },
 	{ id = "BestFriends", name = "Best Friends", text = "Complete 25 secret handshakes.", stat = "Handshakes", goal = 25, embers = 120, badgeId = 0 },
+	{ id = "TheEnd", name = "Home Again", text = "Complete Chapter 4 and bring everyone home.", stat = "Chapter4Clears", goal = 1, embers = 500, badgeId = 0, reward = "TitleHomeAgain" },
+	{ id = "Rescuer", name = "Rescuer", text = "Wake 10 lost adults.", stat = "LostFreed", goal = 10, embers = 150, badgeId = 0 },
+	{ id = "Lightbringer", name = "Lightbringer", text = "Light 10 stone fires.", stat = "BraziersLit", goal = 10, embers = 150, badgeId = 0 },
 	{ id = "Level10", name = "Night Owl", text = "Reach level 10.", stat = "Level", goal = 10, embers = 250, badgeId = 0, reward = "TitleNightOwl" },
 }

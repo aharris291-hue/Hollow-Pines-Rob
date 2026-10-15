@@ -57,6 +57,18 @@ Unlocked by escaping Chapter 2. Chapter 1 teaches looking, Chapter 2 listening, 
 8. **The ferry.** A horn answers across the lake. The copy stops pretending and hunts anyone, alone or not. The store stays safe; when the ferry docks, everyone runs for it.
 9. **The photograph.** The ferryman's photo of the group at the rail. There's one more of you than there should be, and it has no face.
 
+## Chapter 4: The Hollow (finale, about 15–20 minutes)
+
+Unlocked by escaping Chapter 3. The truth, and everyone comes home.
+
+1. **Intro.** The ferry takes the group the wrong way: to the far shore, the oldest part of the forest. "You can't leave until they can."
+2. **The cabin.** Lit and safe. Ranger Hale's first journal tells the truth: the Hollow One is the oldest tree in the forest, and it is lonely. The Watcher, the voices and the copies were all it, looking for company. It keeps whoever gets lost. Warm light wakes them; lighting the three stone fires around it makes it remember it's only a tree. The Watcher appears at the fork and starts stalking.
+3. **The lost.** Mr. Dorsey (the bus driver), Ranger Hale and Captain Reyes (the pilot) stand frozen as wood in three birch groves. Hold your light on and hold E to wake one. They thank you, give the waker a flame (a 🔥 floats above them) and head for the ferry.
+4. **The Hollow.** A clearing of standing stones around a giant hollow pine. Its one eye opens when someone enters, and its gaze sweeps the clearing like a lighthouse beam (glowing streaks on the ground). Caught in the open for about 1.5 s, you're pulled down. Stones, trees and buildings block it.
+5. **The stone fires.** Carry each flame to one of three braziers inside the clearing.
+6. **It remembers.** With all three fires lit, the forest lets go. The Watcher, the last piece of it, doesn't: it chases the group back to the ferry while the gaze sweeps faster until everyone is out of the clearing.
+7. **The photograph.** The school car park, two days later, in daylight: everyone home, the three adults too. At the bottom of the photo, a tiny pine seedling nobody remembers picking up. The end.
+
 ## Creatures
 
 | Creature | Story role | Behaviour |
@@ -64,7 +76,7 @@ Unlocked by escaping Chapter 2. Chapter 1 teaches looking, Chapter 2 listening, 
 | The Watcher | Antagonist | Stalks from the tree line, repositions where nobody is looking, vanishes after eye contact, raises fear nearby. Hunts in the finale. A camera flash makes it look away. |
 | The Mimic | Teaser (Ch. 1), hunter (Ch. 3) | Voice lines using players' names; a decoy wearing a teammate's avatar (harmless in Chapter 1). In Chapter 3 it walks as a copy of a player, fakes walkie pings, catches only players who are alone, and is exposed by the secret handshake. A camera flash stuns it. |
 | The Ranger | Voice on the radio (Ch. 1), hunter (Ch. 2) | Patrols the camp with a lantern. Investigates noises (sprinting, splashing, walkies, whistles), sees farther if your light is on, chases what he sees. Can't reach players who stand still in a tent, are in the lit office, or are up the tower. A camera flash stuns him. |
-| The Hollow One | Unseen | The secret at the centre of the forest, Chapter 4. |
+| The Hollow One | The truth (Ch. 4) | The oldest tree, lonely. Never moves. Its gaze sweeps the clearing; standing in it in the open pulls you down. Standing stones block it. A camera flash makes it close its eye for a moment. |
 
 ## Systems
 
@@ -73,14 +85,15 @@ Unlocked by escaping Chapter 2. Chapter 1 teaches looking, Chapter 2 listening, 
 - **Downed and revive.** Caught players drop to the ground; a teammate holds the prompt for 3 s to help them up, otherwise they wake at the checkpoint after 25 s.
 - **Noise and hiding (Chapter 2).** Sprinting, splashing, walkie pings, whistles and the flare make noises with a radius; The Ranger goes to the loudest one he hears. Standing still in a tent hides you.
 - **Secret handshake (Chapter 3).** H / Shake button / gamepad X. Shaking hands with a real teammate calms both; offering it to the copy exposes it.
+- **The gaze (Chapter 4).** The screen glows gold while The Hollow One sees you, with a warning to get behind a stone.
 - **Equipment.** Two slots (Light, Tool), plus story items handed out in a chapter (the whistle). Flashlight (Lv1), Walkie ping (Lv2), Calming flask (Lv3), Storm lantern (Lv4), Instant camera (Lv6). Unlocked by level, never sold.
 - **Progression.** XP from the chapter and quests, curve `100 × level^1.4`, max level 50, Embers on every level and more every fifth.
 - **Economy.** One currency, Embers: earned from play, quests, achievements and levels; spent on beam colours, titles and pets.
 - **Pets.** Cosmetic companions that float beside you.
 - **Quests.** Three daily quests per UTC day, same on every server.
-- **Achievements.** Fifteen, from lifetime stats, some with title rewards and optional Roblox badges.
+- **Achievements.** Eighteen, from lifetime stats, some with title rewards and optional Roblox badges.
 - **Matchmaking.** The lobby shows a chapter picker; each chapter has its own queue for up to 6, teleported together into a reserved server of that chapter. Locked chapters are refused by the server too.
 - **Saves.** DataStore with session locking, autosave every 2 minutes, save on leave and shutdown, self-healing schema.
-- **First-time hints.** One-time tips (move, interact, light, fear, The Watcher, sprint, reviving, noise, hiding, the whistle, the handshake, staying together) shown the first moment each matters, remembered per account.
-- **Analytics.** Each chapter reports funnel steps to Roblox Analytics as a per-run "Chapter1" / "Chapter2" / "Chapter3" funnel, so the dashboard shows where players quit. Chapter 1's steps also feed the onboarding funnel for first-time players.
+- **First-time hints.** One-time tips (move, interact, light, fear, The Watcher, sprint, reviving, noise, hiding, the whistle, the handshake, staying together, waking the lost, the gaze) shown the first moment each matters, remembered per account.
+- **Analytics.** Each chapter reports funnel steps to Roblox Analytics as a per-run "Chapter1" ... "Chapter4" funnel, so the dashboard shows where players quit. Chapter 1's steps also feed the onboarding funnel for first-time players.
 - **Accessibility.** Sound captions with direction, reduced flashing, reduced camera shake, calmer scares, colourblind markers, interface size, music and effects volume. Story text is always captioned.

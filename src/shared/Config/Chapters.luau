@@ -6,4 +6,5 @@ return {
 	{ id = 1, name = "The Storm", blurb = "A bus crash, a missing driver, and something in the trees.", place = "Chapter1" },
 	{ id = 2, name = "The Ranger", blurb = "A flooded campground. Something with a lantern hears everything.", place = "Chapter2", requires = 1 },
 	{ id = 3, name = "Voices", blurb = "A village in the fog. One of your friends isn't your friend.", place = "Chapter3", requires = 2 },
+	{ id = 4, name = "The Hollow", blurb = "The heart of the forest. Bring everyone home.", place = "Chapter4", requires = 3 },
 }

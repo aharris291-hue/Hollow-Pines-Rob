@@ -8,22 +8,24 @@ lobby.project.json       Lobby place
 chapter1.project.json    Chapter 1 place
 chapter2.project.json    Chapter 2 place
 chapter3.project.json    Chapter 3 place
+chapter4.project.json    Chapter 4 place
 solo-chapter2.project.json  Solo test place that starts Chapter 2 (SoloChapter = 2)
 solo-chapter3.project.json  Solo test place that starts Chapter 3 (SoloChapter = 3)
+solo-chapter4.project.json  Solo test place that starts Chapter 4 (SoloChapter = 4)
 src/
   shared/                ReplicatedStorage.Shared
     Config/              All tuning and content: GameConfig, Chapters, Items, Quests,
                          Achievements, Creatures, Monetization, Assets, DataTemplate
     Util/                Net (remotes), Signal, TableUtil, RateLimit and the pure logic
                          modules FearMath, Progression, QuestLogic, PuzzleCode, Hearing,
-                         ChapterUnlock, Trust
+                         ChapterUnlock, Trust, Gaze
   server/                ServerScriptService.Server
     init.server.luau     Bootstrap: chooses services for the place role, Init then Start
     EventBus.luau        Gameplay facts ("FuseInserted") that quests/achievements listen to
     Services/            One module per system (below)
-    Chapters/            One story module per chapter (Chapter1, Chapter2, Chapter3)
+    Chapters/            One story module per chapter (Chapter1 ... Chapter4)
     Creatures/           Watcher, Mimic, Copy (the Mimic's walking form), Ranger,
-                         Mover (pathfinding), HollowOne (stub)
+                         HollowOne (the sweeping gaze), Mover (pathfinding)
     World/               Builder helpers and the greybox map for each chapter
   client/                StarterPlayerScripts.Client
     init.client.luau     Bootstrap for controllers
@@ -39,7 +41,7 @@ place ids are filled into `GameConfig.Places`, the server uses `game.PlaceId`
 instead. Roles:
 
 - **Lobby**: common services + `LobbyService`, `MatchmakingService`.
-- **Chapter1**, **Chapter2**, **Chapter3** (any `Chapter<N>`) and **Solo**: common services + `PlayerStateService`, `EquipmentService`, `NoiseService`, `TrustService`, `FearService`, `CreatureService`, `OnboardingService`, `ChapterService`. Solo plays the chapter in the `SoloChapter` attribute (default 1).
+- **Chapter1** to **Chapter4** (any `Chapter<N>`) and **Solo**: common services + `PlayerStateService`, `EquipmentService`, `NoiseService`, `TrustService`, `FearService`, `CreatureService`, `OnboardingService`, `ChapterService`. Solo plays the chapter in the `SoloChapter` attribute (default 1).
 
 ## Chapters
 
