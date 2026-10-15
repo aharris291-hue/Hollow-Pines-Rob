@@ -27,6 +27,10 @@ return {
 		WatcherSpotted = 0,
 		NotesRead = 0,
 		TimesCaught = 0,
+		Chapter2Clears = 0,
+		MapPiecesFound = 0,
+		HidFromRanger = 0,
+		FlaresFired = 0,
 		Level = 1,
 	},
 	Achievements = {},
@@ -46,7 +50,8 @@ return {
 	},
 	Purchases = {}, -- receipt ids already granted, keeps ProcessReceipt idempotent
 	PurchaseOrder = {}, -- receipt ids in grant order, used to trim Purchases
-	FirstClear = false,
+	FirstClear = false, -- Chapter 1 cleared (kept for old saves; see Cleared)
+	Cleared = {}, -- { ["1"] = true, ["2"] = true } chapters finished at least once
 	SecondWinds = 0, -- bought Second Wind revives not yet used
 	SupporterGranted = false,
 	HintsSeen = {}, -- first-time hints already shown: { [hintId] = true }

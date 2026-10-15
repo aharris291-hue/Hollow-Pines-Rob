@@ -32,8 +32,19 @@ return {
 	Ranger = {
 		name = "The Ranger",
 		activeFromChapter = 2,
-		patrolSpeed = 10,
-		hearingRadius = 40,
+		height = 8,
+		patrolSpeed = 8,
+		investigateSpeed = 13,
+		chaseSpeed = 16, -- sprinting (20) still gets away, walking (12) does not
+		sightRange = 22, -- sees players this close in front of it
+		litSightRange = 42, -- ...or this far if their light is on
+		sightAngle = 55, -- degrees either side of its facing
+		hearingMultiplier = 1,
+		loseDistance = 42,
+		searchTime = 6,
+		catchDistance = 5,
+		pauseAfterCatch = 4,
+		elevatedHeight = 14, -- it will not climb after players higher than this
 	},
 	HollowOne = {
 		name = "The Hollow One",

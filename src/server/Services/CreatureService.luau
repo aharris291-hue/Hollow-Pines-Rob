@@ -11,6 +11,7 @@ local EventBus = require(script.Parent.Parent.EventBus)
 local Creatures = script.Parent.Parent:WaitForChild("Creatures")
 local Watcher = require(Creatures.Watcher)
 local Mimic = require(Creatures.Mimic)
+local Ranger = require(Creatures.Ranger)
 
 local CreatureService = {}
 
@@ -51,7 +52,7 @@ function CreatureService:Init(registry)
 	end)
 end
 
-function CreatureService:Spawn()
+function CreatureService:Spawn(chapterId: number?)
 	self:Despawn()
 	self.watcher = Watcher.new({
 		getTargets = activeTargets,
@@ -73,42 +74,85 @@ function CreatureService:Spawn()
 			services.FearService:Spike(player, amount)
 		end,
 	})
+	if (chapterId or 1) >= 2 then
+		local refs = services.ChapterService:GetRefs()
+		self.ranger = Ranger.new({
+			getTargets = activeTargets,
+			getNoises = function()
+				return services.NoiseService:GetNoises()
+			end,
+			hasLight = function(player)
+				return services.EquipmentService:HasLight(player)
+			end,
+			isSafe = function(position)
+				return services.ChapterService:IsInSafeZone(position)
+			end,
+			patrolPoints = refs.PatrolPoints,
+			onSpotted = function(player)
+				EventBus.Fire("RangerSpotted", player)
+				services.FearService:Spike(player, 18)
+				Net.Event("ScreenEffect"):FireClient(player, "RangerSpotted", { soundId = Assets.Sounds.WatcherSting })
+			end,
+			onLost = function(player, hidden)
+				if hidden then
+					EventBus.Fire("HidFromRanger", player)
+					Net.Event("Toast"):FireClient(player, "It lost you. Stay still...", "Success")
+				end
+			end,
+			onHeard = function(noise)
+				if noise.source and typeof(noise.source) == "Instance" and noise.source:IsA("Player") then
+					Net.Event("Caption"):FireClient(noise.source, "[The lantern swings towards the sound you made]", "Sound")
+				end
+			end,
+			onCatch = function(player)
+				services.PlayerStateService:Down(player, "The Ranger")
+			end,
+		})
+	end
 end
 
 function CreatureService:Despawn()
-	if self.watcher then
-		self.watcher:Destroy()
-		self.watcher = nil
-	end
-	if self.mimic then
-		self.mimic:Destroy()
-		self.mimic = nil
+	for _, key in { "watcher", "mimic", "ranger" } do
+		if self[key] then
+			self[key]:Destroy()
+			self[key] = nil
+		end
 	end
 end
 
 -- Distance from a position to the nearest visible threat, for the fear system.
 function CreatureService:ThreatDistance(position: Vector3): number?
-	local watcherPosition = self.watcher and self.watcher:Position()
-	if watcherPosition then
-		return (watcherPosition - position).Magnitude
+	local nearest = nil
+	for _, creature in { self.watcher, self.ranger } do
+		local creaturePosition = creature and creature:Position()
+		if creaturePosition then
+			local distance = (creaturePosition - position).Magnitude
+			if not nearest or distance < nearest then
+				nearest = distance
+			end
+		end
 	end
-	return nil
+	return nearest
 end
 
--- Camera flash: makes The Watcher look away if it is in front of the player.
+-- Camera flash: makes a creature in front of the player look away.
 function CreatureService:Flash(player: Player, stunTime: number): boolean
-	local watcherPosition = self.watcher and self.watcher:Position()
 	local character = player.Character
 	local root = character and character:FindFirstChild("HumanoidRootPart")
-	if not watcherPosition or not root then
+	if not root then
 		return false
 	end
-	local offset = watcherPosition - root.Position
 	local look = looks[player] or root.CFrame.LookVector
-	if offset.Magnitude < 45 and look:Dot(offset.Unit) > 0.6 then
-		self.watcher:Stun(stunTime)
-		EventBus.Fire("WatcherFlashed", player)
-		return true
+	for _, creature in { self.watcher, self.ranger } do
+		local creaturePosition = creature and creature:Position()
+		if creaturePosition then
+			local offset = creaturePosition - root.Position
+			if offset.Magnitude < 45 and look:Dot(offset.Unit) > 0.6 then
+				creature:Stun(stunTime)
+				EventBus.Fire("WatcherFlashed", player)
+				return true
+			end
+		end
 	end
 	return false
 end
@@ -120,11 +164,12 @@ function CreatureService:Start()
 		local now = os.clock()
 		local dt = now - last
 		last = now
-		for _, creature in { self.watcher, self.mimic } do
+		for _, key in { "watcher", "mimic", "ranger" } do
+			local creature = self[key]
 			if creature then
 				local ok, err = pcall(creature.Update, creature, dt)
 				if not ok then
-					warn("[CreatureService] update error: " .. tostring(err))
+					warn("[CreatureService] " .. key .. " update error: " .. tostring(err))
 				end
 			end
 		end

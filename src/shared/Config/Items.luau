@@ -12,8 +12,9 @@ Items.Equipment = {
 		slot = "Light",
 		unlockLevel = 1,
 		battery = 180, -- seconds of light
-		range = 45,
-		brightness = 3,
+		range = 60,
+		brightness = 5,
+		angle = 70,
 	},
 	Lantern = {
 		id = "Lantern",
@@ -22,8 +23,8 @@ Items.Equipment = {
 		slot = "Light",
 		unlockLevel = 4,
 		battery = 240,
-		range = 22,
-		brightness = 2,
+		range = 30,
+		brightness = 3,
 		teamCalm = 1.0, -- extra fear recovery for teammates in range
 	},
 	Walkie = {
@@ -50,6 +51,15 @@ Items.Equipment = {
 		slot = "Tool",
 		unlockLevel = 3,
 		fearReduction = 40,
+	},
+	Whistle = {
+		id = "Whistle",
+		name = "Ranger's Whistle",
+		description = "Blow it to lure The Ranger to where you stand. Found in Chapter 2.",
+		slot = "Story", -- handed out by the story, never equipped from the menu
+		storyItem = true,
+		unlockLevel = 0,
+		cooldown = 12,
 	},
 }
 

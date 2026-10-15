@@ -1,12 +1,12 @@
--- First-time hints and the analytics funnel for Chapter 1.
+-- First-time hints and the per-chapter analytics funnels.
 --
 -- Hints are shown once per account (remembered in profile.HintsSeen), at the
 -- moment they matter: how to interact when the first prompt appears, how to use
 -- the light when it is handed out, what fear means when it first rises.
 --
 -- Funnel steps go to Roblox Analytics twice: as the onboarding funnel (counted
--- once per new player, shows where first-timers drop off) and as a "Chapter1"
--- funnel per run (shows where every run drops off).
+-- once per new player during Chapter 1, shows where first-timers drop off) and
+-- as a "Chapter<N>" funnel per run (shows where every run drops off).
 
 local AnalyticsService = game:GetService("AnalyticsService")
 local HttpService = game:GetService("HttpService")
@@ -26,10 +26,14 @@ local HINTS = {
 	Watcher = "Don't stare at it. It only moves when nobody is looking.",
 	Revive = "A friend was caught! Stand next to them and hold E to help them up.",
 	Sprint = "Hold Shift, or tap Run, to sprint. Stamina refills while you walk.",
+	Noise = "Running and splashing through water make noise. Walk slowly to stay quiet.",
+	Hide = "Stand still inside a tent to hide. The Ranger can't find you there.",
+	Whistle = "Press 3, or tap the whistle, to blow it. The Ranger will go to the sound, away from your friends.",
 }
 
 local services
 local runId = ""
+local chapterId = 1
 
 function OnboardingService:Init(registry)
 	services = registry
@@ -52,6 +56,8 @@ function OnboardingService:Start()
 	EventBus.Event:Connect(function(name, player)
 		if name == "WatcherSpotted" and player then
 			self:Hint(player, "Watcher")
+		elseif name == "RangerSpotted" and player then
+			self:Hint(player, "Hide")
 		end
 	end)
 
@@ -83,17 +89,18 @@ function OnboardingService:HintAll(hintId: string)
 	end
 end
 
-function OnboardingService:NewRun()
+function OnboardingService:NewRun(id: number?)
 	runId = HttpService:GenerateGUID(false)
+	chapterId = id or 1
 end
 
 function OnboardingService:Step(step: number, stepName: string)
 	for _, player in Players:GetPlayers() do
 		local data = services.DataService:Get(player)
-		if data and data.Stats.ChaptersCompleted == 0 then
+		if chapterId == 1 and data and data.Stats.ChaptersCompleted == 0 then
 			pcall(AnalyticsService.LogOnboardingFunnelStepEvent, AnalyticsService, player, step, stepName)
 		end
-		pcall(AnalyticsService.LogFunnelStepEvent, AnalyticsService, player, "Chapter1", runId, step, stepName)
+		pcall(AnalyticsService.LogFunnelStepEvent, AnalyticsService, player, "Chapter" .. chapterId, runId, step, stepName)
 	end
 end
 
