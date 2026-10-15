@@ -93,6 +93,7 @@ local function buildCopyOf(player: Player): Model
 	local body = model :: Model
 	stripped(body)
 	body.Name = "Copy_" .. player.Name
+	body:SetAttribute("Creature", "Copy")
 	body.PrimaryPart = body:FindFirstChild("HumanoidRootPart") :: BasePart
 	local humanoid = body:FindFirstChildOfClass("Humanoid") :: Humanoid
 	humanoid.DisplayName = player.DisplayName

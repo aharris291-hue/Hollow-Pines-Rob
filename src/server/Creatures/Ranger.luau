@@ -18,7 +18,10 @@ local HIDDEN_CFRAME = CFrame.new(0, -400, 0) -- above FallenPartsDestroyHeight
 local COAT = Color3.fromRGB(46, 58, 40)
 local SKIN = Color3.fromRGB(20, 18, 18)
 
-local function weldedPart(model: Model, root: BasePart, name: string, size: Vector3, offset: CFrame, color: Color3, material: Enum.Material?, shape: Enum.PartType?)
+-- `pivot` makes the part a joint the client can animate (Gait): "top" swings
+-- from its top end (hips, shoulders), "bottom" from its bottom end (the neck).
+-- `holder` welds the part to another part instead of the root (a hat to the head).
+local function weldedPart(model: Model, root: BasePart, name: string, size: Vector3, offset: CFrame, color: Color3, material: Enum.Material?, shape: Enum.PartType?, pivot: string?, holder: BasePart?)
 	local part = Instance.new("Part")
 	part.Name = name
 	part.Size = size
@@ -31,10 +34,21 @@ local function weldedPart(model: Model, root: BasePart, name: string, size: Vect
 	part.CanTouch = false
 	part.Massless = true
 	part.CFrame = root.CFrame * offset
-	local weld = Instance.new("WeldConstraint")
-	weld.Part0 = root
-	weld.Part1 = part
-	weld.Parent = part
+	if pivot then
+		local hinge = CFrame.new(0, if pivot == "top" then size.Y / 2 else -size.Y / 2, 0)
+		local joint = Instance.new("Motor6D")
+		joint.Name = name .. "Joint"
+		joint.Part0 = root
+		joint.Part1 = part
+		joint.C0 = offset * hinge
+		joint.C1 = hinge
+		joint.Parent = part
+	else
+		local weld = Instance.new("WeldConstraint")
+		weld.Part0 = holder or root
+		weld.Part1 = part
+		weld.Parent = part
+	end
 	part.Parent = model
 	return part
 end
@@ -54,17 +68,17 @@ local function buildModel(): (Model, PointLight)
 	model.PrimaryPart = root
 
 	weldedPart(model, root, "Coat", Vector3.new(2.6, 4.6, 1.4), CFrame.new(0, 0.6, 0), COAT)
-	weldedPart(model, root, "Head", Vector3.new(1.4, 1.5, 1.4), CFrame.new(0, 3.6, 0), SKIN, Enum.Material.SmoothPlastic)
+	local head = weldedPart(model, root, "Head", Vector3.new(1.4, 1.5, 1.4), CFrame.new(0, 3.6, 0), SKIN, Enum.Material.SmoothPlastic, nil, "bottom")
 	-- The wide hat throws its face into permanent shadow.
-	weldedPart(model, root, "HatBrim", Vector3.new(0.2, 3.6, 3.6), CFrame.new(0, 4.3, 0) * CFrame.Angles(0, 0, math.pi / 2), Color3.fromRGB(110, 86, 52), Enum.Material.Fabric, Enum.PartType.Cylinder)
-	weldedPart(model, root, "HatCrown", Vector3.new(1.1, 1.6, 1.6), CFrame.new(0, 4.9, 0) * CFrame.Angles(0, 0, math.pi / 2), Color3.fromRGB(110, 86, 52), Enum.Material.Fabric, Enum.PartType.Cylinder)
+	weldedPart(model, root, "HatBrim", Vector3.new(0.2, 3.6, 3.6), CFrame.new(0, 4.3, 0) * CFrame.Angles(0, 0, math.pi / 2), Color3.fromRGB(110, 86, 52), Enum.Material.Fabric, Enum.PartType.Cylinder, nil, head)
+	weldedPart(model, root, "HatCrown", Vector3.new(1.1, 1.6, 1.6), CFrame.new(0, 4.9, 0) * CFrame.Angles(0, 0, math.pi / 2), Color3.fromRGB(110, 86, 52), Enum.Material.Fabric, Enum.PartType.Cylinder, nil, head)
 	weldedPart(model, root, "Badge", Vector3.new(0.4, 0.4, 0.1), CFrame.new(-0.6, 1.8, -0.72), Color3.fromRGB(200, 170, 80), Enum.Material.Metal)
-	weldedPart(model, root, "LeftArm", Vector3.new(0.6, 4.2, 0.6), CFrame.new(-1.6, 0.6, 0), COAT)
-	weldedPart(model, root, "RightArm", Vector3.new(0.6, 4.2, 0.6), CFrame.new(1.6, 1.2, -0.8) * CFrame.Angles(math.rad(-35), 0, 0), COAT)
-	weldedPart(model, root, "LeftLeg", Vector3.new(0.8, 3.5, 0.8), CFrame.new(-0.5, -2.75, 0), Color3.fromRGB(30, 30, 28))
-	weldedPart(model, root, "RightLeg", Vector3.new(0.8, 3.5, 0.8), CFrame.new(0.5, -2.75, 0), Color3.fromRGB(30, 30, 28))
+	weldedPart(model, root, "LeftArm", Vector3.new(0.6, 4.2, 0.6), CFrame.new(-1.6, 0.6, 0), COAT, nil, nil, "top")
+	local lanternArm = weldedPart(model, root, "RightArm", Vector3.new(0.6, 4.2, 0.6), CFrame.new(1.6, 1.2, -0.8) * CFrame.Angles(math.rad(-35), 0, 0), COAT, nil, nil, "top")
+	weldedPart(model, root, "LeftLeg", Vector3.new(0.8, 3.5, 0.8), CFrame.new(-0.5, -2.75, 0), Color3.fromRGB(30, 30, 28), nil, nil, "top")
+	weldedPart(model, root, "RightLeg", Vector3.new(0.8, 3.5, 0.8), CFrame.new(0.5, -2.75, 0), Color3.fromRGB(30, 30, 28), nil, nil, "top")
 
-	local lantern = weldedPart(model, root, "Lantern", Vector3.new(0.9, 1.2, 0.9), CFrame.new(1.7, -0.6, -2), Color3.fromRGB(255, 170, 80), Enum.Material.Neon)
+	local lantern = weldedPart(model, root, "Lantern", Vector3.new(0.9, 1.2, 0.9), CFrame.new(1.7, -0.6, -2), Color3.fromRGB(255, 170, 80), Enum.Material.Neon, nil, nil, lanternArm)
 	local light = Instance.new("PointLight")
 	light.Color = Color3.fromRGB(255, 160, 70)
 	light.Range = 20
@@ -84,6 +98,7 @@ local function buildModel(): (Model, PointLight)
 	humanoid:SetStateEnabled(Enum.HumanoidStateType.Climbing, false)
 	humanoid.Parent = model
 
+	model:SetAttribute("Creature", "Ranger")
 	model:PivotTo(HIDDEN_CFRAME)
 	return model, light
 end

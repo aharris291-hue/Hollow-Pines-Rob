@@ -103,6 +103,7 @@ end
 
 function HollowOne:SetMode(mode: string)
 	self.mode = mode
+	self.model:SetAttribute("Mode", mode) -- the client sways its branches harder when Angry
 	self.beam.Parent = if mode == "Dormant" then nil else self.model
 	self.eye.Color = if mode == "Angry" then Color3.fromRGB(255, 120, 80) else GLOW
 	if mode == "Dormant" then
