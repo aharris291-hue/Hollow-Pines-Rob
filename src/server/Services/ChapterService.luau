@@ -403,6 +403,7 @@ local function runEnding()
 	end
 	payload.userIds = userIds
 	payload.hold = chapter.config.EndingPhotoHold
+	payload.creditsLength = chapter.config.CreditsLength -- only the final chapter rolls credits
 	Net.Event("PhotoEnding"):FireAllClients(payload)
 	task.wait(payload.hold + 4)
 	grantRewards()

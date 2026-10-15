@@ -3,6 +3,7 @@
 
 local MarketplaceService = game:GetService("MarketplaceService")
 local Players = game:GetService("Players")
+local SocialService = game:GetService("SocialService")
 
 local Shared = game:GetService("ReplicatedStorage"):WaitForChild("Shared")
 local Monetization = require(Shared.Config.Monetization)
@@ -207,6 +208,17 @@ function Panels:Lobby()
 			step(1)
 		end)
 	end
+
+	-- Friends who accept land in this camp and can pick the same chapter.
+	local inviteButton = UIKit.button("Invite friends", { AnchorPoint = Vector2.new(1, 1), Position = UDim2.new(1, 12, 0, -20), Size = UDim2.fromOffset(150, 34), TextSize = 15, Parent = frame }, function()
+		local ok, canInvite = pcall(SocialService.CanSendGameInviteAsync, SocialService, Players.LocalPlayer)
+		if ok and canInvite then
+			pcall(SocialService.PromptGameInvite, SocialService, Players.LocalPlayer)
+		else
+			self.controllers.UIController.hud:Toast("Inviting friends isn't available here.", "Info")
+		end
+	end)
+	inviteButton.Name = "Invite"
 
 	Net.Event("QueueUpdated").OnClientEvent:Connect(function(queue)
 		lastQueue = queue

@@ -14,7 +14,9 @@ local CONFIG = Creatures.Watcher
 local HIDDEN_CFRAME = CFrame.new(0, -400, 0) -- above FallenPartsDestroyHeight
 local SKIN = Color3.fromRGB(14, 13, 16)
 
-local function weldedPart(model: Model, root: BasePart, name: string, size: Vector3, offset: CFrame, color: Color3, material: Enum.Material?)
+-- `pivot` makes the part a joint the client can animate (Gait): "top" swings
+-- from its top end (hips, shoulders), "bottom" from its bottom end (the neck).
+local function weldedPart(model: Model, root: BasePart, name: string, size: Vector3, offset: CFrame, color: Color3, material: Enum.Material?, pivot: string?)
 	local part = Instance.new("Part")
 	part.Name = name
 	part.Size = size
@@ -25,10 +27,21 @@ local function weldedPart(model: Model, root: BasePart, name: string, size: Vect
 	part.CanTouch = false
 	part.Massless = true
 	part.CFrame = root.CFrame * offset
-	local weld = Instance.new("WeldConstraint")
-	weld.Part0 = root
-	weld.Part1 = part
-	weld.Parent = part
+	if pivot then
+		local hinge = CFrame.new(0, if pivot == "top" then size.Y / 2 else -size.Y / 2, 0)
+		local joint = Instance.new("Motor6D")
+		joint.Name = name .. "Joint"
+		joint.Part0 = root
+		joint.Part1 = part
+		joint.C0 = offset * hinge
+		joint.C1 = hinge
+		joint.Parent = part
+	else
+		local weld = Instance.new("WeldConstraint")
+		weld.Part0 = root
+		weld.Part1 = part
+		weld.Parent = part
+	end
 	part.Parent = model
 	return part
 end
@@ -49,15 +62,18 @@ local function buildModel(): Model
 
 	-- Proportions are deliberately wrong: long limbs, narrow body, small head.
 	weldedPart(model, root, "Torso", Vector3.new(2.2, 5.5, 1.2), CFrame.new(0, 2.6, 0), SKIN)
-	local head = weldedPart(model, root, "Head", Vector3.new(1.6, 2, 1.6), CFrame.new(0, 6.3, 0), SKIN)
+	local head = weldedPart(model, root, "Head", Vector3.new(1.6, 2, 1.6), CFrame.new(0, 6.3, 0), SKIN, nil, "bottom")
 	head.Shape = Enum.PartType.Ball
-	weldedPart(model, root, "LeftArm", Vector3.new(0.5, 7, 0.5), CFrame.new(-1.5, 1.2, 0) * CFrame.Angles(0, 0, math.rad(-4)), SKIN)
-	weldedPart(model, root, "RightArm", Vector3.new(0.5, 7, 0.5), CFrame.new(1.5, 1.2, 0) * CFrame.Angles(0, 0, math.rad(4)), SKIN)
-	weldedPart(model, root, "LeftLeg", Vector3.new(0.6, 5, 0.6), CFrame.new(-0.6, -3.5, 0), SKIN)
-	weldedPart(model, root, "RightLeg", Vector3.new(0.6, 5, 0.6), CFrame.new(0.6, -3.5, 0), SKIN)
+	weldedPart(model, root, "LeftArm", Vector3.new(0.5, 7, 0.5), CFrame.new(-1.5, 1.2, 0) * CFrame.Angles(0, 0, math.rad(-4)), SKIN, nil, "top")
+	weldedPart(model, root, "RightArm", Vector3.new(0.5, 7, 0.5), CFrame.new(1.5, 1.2, 0) * CFrame.Angles(0, 0, math.rad(4)), SKIN, nil, "top")
+	weldedPart(model, root, "LeftLeg", Vector3.new(0.6, 5, 0.6), CFrame.new(-0.6, -3.5, 0), SKIN, nil, "top")
+	weldedPart(model, root, "RightLeg", Vector3.new(0.6, 5, 0.6), CFrame.new(0.6, -3.5, 0), SKIN, nil, "top")
 	for _, side in { -0.35, 0.35 } do
 		local eye = weldedPart(model, root, "Eye", Vector3.new(0.18, 0.18, 0.1), CFrame.new(side, 6.4, -0.78), Color3.fromRGB(220, 230, 255), Enum.Material.Neon)
 		eye.CanQuery = false
+		-- The eyes ride on the head so they follow it when it tilts.
+		local weld = eye:FindFirstChildOfClass("WeldConstraint") :: WeldConstraint
+		weld.Part0 = head
 	end
 
 	local humanoid = Instance.new("Humanoid")
@@ -71,6 +87,7 @@ local function buildModel(): Model
 	humanoid:SetStateEnabled(Enum.HumanoidStateType.Dead, false)
 	humanoid.Parent = model
 
+	model:SetAttribute("Creature", "Watcher")
 	model:PivotTo(HIDDEN_CFRAME)
 	return model
 end

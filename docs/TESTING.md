@@ -61,7 +61,13 @@ Run in Studio with *Clients and Servers*, once solo and once with 3 players.
 - [ ] Standing in the streaks in the open turns the screen gold with a warning, then downs you; behind a stone it does not
 - [ ] Each flame lights one stone fire; with all three lit the "it remembers" lines play
 - [ ] The Watcher chases; the gaze sweeps faster until everyone has left the clearing; reaching the dock end marks you safe
-- [ ] The home photograph (school car park, three adults, seedling) shows; results say "You finished The Hollow Pines"
+- [ ] The home photograph (school car park, three adults, seedling) shows, then the credits roll with everyone's names under "Starring"; Skip ends them early; results say "You finished The Hollow Pines"
+
+**Creature animation**
+- [ ] The Watcher takes long slow strides when it chases; standing still, its head slowly tilts
+- [ ] The Ranger walks with his lantern arm held out; standing still, he turns his head side to side to listen
+- [ ] The copy's legs walk but its arms hang still and its head is cocked a little wrong
+- [ ] The Hollow One's branches sway gently, and harder once the stone fires are lit
 
 **Systems**
 - [ ] On a fresh save, tips appear once each (move, interact, light, fear, The Watcher, sprint, revive) and not again after rejoining
@@ -71,6 +77,7 @@ Run in Studio with *Clients and Servers*, once solo and once with 3 players.
 - [ ] Quests progress and can be claimed once
 - [ ] Settings save and apply (captions, flashing, shake, calmer scares, markers, size, volume)
 - [ ] Leave and rejoin: Embers, level, items and settings persist
+- [ ] Lobby: Invite friends opens the Roblox invite window (published game; Studio shows a short notice instead)
 - [ ] Lobby: Chapter 2 shows locked on a fresh save and unlocked after a Chapter 1 clear; Play queues the picked chapter, countdown runs, group teleports together (published game only)
 
 **Devices**

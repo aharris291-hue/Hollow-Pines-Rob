@@ -18,7 +18,7 @@ src/
                          Achievements, Creatures, Monetization, Assets, DataTemplate
     Util/                Net (remotes), Signal, TableUtil, RateLimit and the pure logic
                          modules FearMath, Progression, QuestLogic, PuzzleCode, Hearing,
-                         ChapterUnlock, Trust, Gaze
+                         ChapterUnlock, Trust, Gaze, Gait
   server/                ServerScriptService.Server
     init.server.luau     Bootstrap: chooses services for the place role, Init then Start
     EventBus.luau        Gameplay facts ("FuseInserted") that quests/achievements listen to
@@ -29,7 +29,7 @@ src/
     World/               Builder helpers and the greybox map for each chapter
   client/                StarterPlayerScripts.Client
     init.client.luau     Bootstrap for controllers
-    Controllers/         Data, Audio, Input, Atmosphere, Fear, UI, Cutscene
+    Controllers/         Data, Audio, Input, Atmosphere, Fear, UI, Cutscene, CreatureAnimator
     UI/                  UIKit, Hud, Menus, Panels
 tests/                   Lune test runner and specs
 ```

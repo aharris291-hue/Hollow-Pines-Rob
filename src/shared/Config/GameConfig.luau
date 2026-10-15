@@ -82,7 +82,8 @@ GameConfig.Chapter4 = {
 	IntroLength = 10,
 	LostCount = 3, -- the driver, the ranger and the pilot
 	EndingPhotoHold = 10,
-	ReturnToLobbyDelay = 30,
+	CreditsLength = 45, -- the credits roll after the photo (Config/Credits); players can skip
+	ReturnToLobbyDelay = 75, -- long enough to watch the credits, then the results
 }
 
 -- The secret handshake (Chapter 3): how players prove they are real.

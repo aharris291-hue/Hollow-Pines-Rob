@@ -4,6 +4,7 @@ local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 
 local Shared = game:GetService("ReplicatedStorage"):WaitForChild("Shared")
+local Credits = require(Shared.Config.Credits)
 local Net = require(Shared.Util.Net)
 local UI = script.Parent.Parent:WaitForChild("UI")
 local UIKit = require(UI.UIKit)
@@ -272,6 +273,57 @@ local function buildPhoto(parent: Frame, userIds: { number }, scene: string?)
 	viewport.CurrentCamera = camera
 end
 
+-- The credits roll after the final chapter. The results panel waits underneath
+-- and shows once they end or the player skips them.
+local function rollCredits(length: number, userIds: { number })
+	local names = {}
+	for _, userId in userIds do
+		local member = Players:GetPlayerByUserId(userId)
+		if member then
+			table.insert(names, member.DisplayName)
+		end
+	end
+	local frame = UIKit.new("Frame", { Size = UDim2.fromScale(1, 1), BackgroundColor3 = Color3.new(0, 0, 0), BorderSizePixel = 0, ZIndex = 20, ClipsDescendants = true, Parent = gui })
+	local column = UIKit.new("Frame", { AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.fromScale(0.5, 1), Size = UDim2.new(0.8, 0, 0, 0), AutomaticSize = Enum.AutomaticSize.Y, BackgroundTransparency = 1, ZIndex = 21, Parent = frame }, { UIKit.list(Enum.FillDirection.Vertical, 6, Enum.HorizontalAlignment.Center) })
+	local order = 0
+	local function line(text: string, size: number, color: Color3, font: Enum.Font?)
+		order += 1
+		UIKit.text({ Size = UDim2.new(1, 0, 0, size + 10), Text = text, TextSize = size, TextColor3 = color, Font = font or UIKit.Theme.Story, TextXAlignment = Enum.TextXAlignment.Center, LayoutOrder = order, ZIndex = 22, Parent = column })
+	end
+	for _, entry in Credits do
+		if entry.heading ~= "" then
+			line(entry.heading, 22, UIKit.Theme.Accent)
+		end
+		for _, name in entry.names do
+			if name == "{players}" then
+				for _, member in names do
+					line(member, 26, Color3.new(1, 1, 1))
+				end
+			else
+				line(name, 26, Color3.new(1, 1, 1))
+			end
+		end
+		line("", 30, Color3.new(1, 1, 1))
+	end
+
+	local done = false
+	UIKit.button("Skip", { AnchorPoint = Vector2.new(1, 1), Position = UDim2.new(1, -24, 1, -24), Size = UDim2.fromOffset(110, 36), ZIndex = 23, Parent = frame }, function()
+		done = true
+	end)
+	task.wait() -- let the column size itself before it starts to move
+	local travel = column.AbsoluteSize.Y + frame.AbsoluteSize.Y
+	local scroll = TweenService:Create(column, TweenInfo.new(length, Enum.EasingStyle.Linear), { Position = UDim2.new(0.5, 0, 1, -travel) })
+	scroll:Play()
+	local started = os.clock()
+	while not done and os.clock() - started < length do
+		task.wait(0.1)
+	end
+	scroll:Cancel()
+	column.Visible = false
+	fade(frame, nil, 1, 1)
+	frame:Destroy()
+end
+
 local function playEnding(data)
 	local frame, _ = overlay()
 	frame.BackgroundTransparency = 1
@@ -285,6 +337,12 @@ local function playEnding(data)
 	local story = UIKit.text({ AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.new(0.5, 0, 0.42, 250), Size = UDim2.new(0.8, 0, 0, 170), TextWrapped = true, Font = UIKit.Theme.Story, TextSize = 19, TextXAlignment = Enum.TextXAlignment.Center, TextTransparency = 1, ZIndex = 22, Text = data.text, Parent = frame })
 	TweenService:Create(story, TweenInfo.new(2), { TextTransparency = 0 }):Play()
 	task.wait(data.hold)
+	if data.creditsLength then
+		-- Straight from the photo into the credits, without a flash of the world.
+		frame:Destroy()
+		rollCredits(data.creditsLength, data.userIds)
+		return
+	end
 	fade(frame, nil, 1, 1.5)
 	frame:Destroy()
 end

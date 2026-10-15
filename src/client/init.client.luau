@@ -14,6 +14,7 @@ local ORDER = {
 	"FearController",
 	"UIController",
 	"CutsceneController",
+	"CreatureAnimator",
 }
 
 local folder = script:WaitForChild("Controllers")
