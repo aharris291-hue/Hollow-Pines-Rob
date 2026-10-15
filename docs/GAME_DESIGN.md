@@ -51,4 +51,6 @@ they wake at the last checkpoint. Story text is short and readable aloud.
 - **Achievements.** Eight, from lifetime stats, some with title rewards and optional Roblox badges.
 - **Matchmaking.** Lobby queue for up to 6, teleported together into a reserved Chapter 1 server.
 - **Saves.** DataStore with session locking, autosave every 2 minutes, save on leave and shutdown, self-healing schema.
+- **First-time hints.** One-time tips (move, interact, light, fear, The Watcher, sprint, reviving) shown the first moment each matters, remembered per account.
+- **Analytics.** Chapter 1 reports 10 funnel steps (boarded through chapter complete) to Roblox Analytics: as the onboarding funnel for first-time players and as a per-run "Chapter1" funnel, so the dashboard shows where players quit.
 - **Accessibility.** Sound captions with direction, reduced flashing, reduced camera shake, calmer scares, colourblind markers, interface size, music and effects volume. Story text is always captioned.

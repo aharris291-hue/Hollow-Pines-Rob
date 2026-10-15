@@ -20,6 +20,7 @@ local EVENTS = {
 	"PhotoEnding",
 	"OpenPanel",
 	"WalkiePing",
+	"Hint",
 	-- client -> server
 	"BuyItem",
 	"EquipItem",

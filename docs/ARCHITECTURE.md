@@ -32,7 +32,7 @@ place ids are filled into `GameConfig.Places`, the server uses `game.PlaceId`
 instead. Roles:
 
 - **Lobby**: common services + `LobbyService`, `MatchmakingService`.
-- **Chapter1** and **Solo**: common services + `PlayerStateService`, `EquipmentService`, `FearService`, `CreatureService`, `ChapterService`.
+- **Chapter1** and **Solo**: common services + `PlayerStateService`, `EquipmentService`, `FearService`, `CreatureService`, `OnboardingService`, `ChapterService`.
 
 Common services: `DataService`, `EconomyService`, `ProgressionService`,
 `InventoryService`, `MonetizationService`, `QuestService`, `AchievementService`,

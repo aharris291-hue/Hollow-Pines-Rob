@@ -30,6 +30,7 @@ Run in Studio with *Clients and Servers*, once solo and once with 3 players.
 - [ ] Rewards arrive (Embers, XP, achievements)
 
 **Systems**
+- [ ] On a fresh save, tips appear once each (move, interact, light, fear, The Watcher, sprint, revive) and not again after rejoining
 - [ ] Fear rises alone in the dark and falls with light, teammates and in the station
 - [ ] Sprint drains stamina; Panicked slows you
 - [ ] Shop buys deduct Embers; equip/unequip beams, titles, pets

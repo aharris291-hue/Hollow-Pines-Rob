@@ -61,6 +61,14 @@ function Hud.new(gui: ScreenGui, controllers)
 	-- Toasts (right)
 	self.toasts = UIKit.new("Frame", { Name = "Toasts", AnchorPoint = Vector2.new(1, 0), Position = UDim2.new(1, -12, 0, 100), Size = UDim2.fromOffset(300, 0), AutomaticSize = Enum.AutomaticSize.Y, BackgroundTransparency = 1, Parent = gui }, { UIKit.list(nil, 6, Enum.HorizontalAlignment.Right) })
 
+	-- First-time hint card, under the objective (clear of chat and mobile controls).
+	self.hint = UIKit.panel({ Name = "Hint", AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.new(0.5, 0, 0, 84), Size = UDim2.fromOffset(320, 0), AutomaticSize = Enum.AutomaticSize.Y, BackgroundColor3 = Color3.fromRGB(28, 36, 48), Visible = false, Parent = gui })
+	UIKit.padding(12).Parent = self.hint
+	UIKit.list(nil, 4).Parent = self.hint
+	UIKit.text({ Text = "TIP", Font = Theme.FontBold, TextSize = 13, TextColor3 = Theme.Calm, LayoutOrder = 1, Parent = self.hint })
+	self.hintText = UIKit.text({ Size = UDim2.new(1, 0, 0, 0), AutomaticSize = Enum.AutomaticSize.Y, TextSize = 16, LayoutOrder = 2, Parent = self.hint })
+	self.hintQueue = {}
+
 	self:_buildMarker()
 	RunService.Heartbeat:Connect(function()
 		self:_tick()
@@ -132,6 +140,25 @@ function Hud:Caption(text: string, kind: string?)
 			task.wait(0.6)
 			label:Destroy()
 		end
+	end)
+end
+
+-- Hints queue up so two arriving together are both read.
+function Hud:Hint(text: string)
+	table.insert(self.hintQueue, text)
+	if self.hintShowing then
+		return
+	end
+	self.hintShowing = true
+	task.spawn(function()
+		while #self.hintQueue > 0 do
+			self.hintText.Text = table.remove(self.hintQueue, 1)
+			self.hint.Visible = true
+			task.wait(7)
+			self.hint.Visible = false
+			task.wait(0.4)
+		end
+		self.hintShowing = false
 	end)
 end
 

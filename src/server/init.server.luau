@@ -46,7 +46,7 @@ local COMMON = {
 
 local BY_ROLE = {
 	Lobby = { "LobbyService", "MatchmakingService" },
-	Chapter1 = { "PlayerStateService", "EquipmentService", "FearService", "CreatureService", "ChapterService" },
+	Chapter1 = { "PlayerStateService", "EquipmentService", "FearService", "CreatureService", "OnboardingService", "ChapterService" },
 }
 BY_ROLE.Solo = BY_ROLE.Chapter1
 
