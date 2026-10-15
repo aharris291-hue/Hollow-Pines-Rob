@@ -37,6 +37,7 @@ require("./specs/Signal.spec")
 require("./specs/Hearing.spec")
 require("./specs/ChapterUnlock.spec")
 require("./specs/Trust.spec")
+require("./specs/Gaze.spec")
 
 local results = TestKit.results()
 print(string.format("Syntax: %d files compiled, %d errors", checked, #syntaxErrors))

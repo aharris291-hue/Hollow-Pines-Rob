@@ -152,6 +152,25 @@ local EFFECTS = {
 		flash(Color3.fromRGB(200, 170, 255), 0.35, 0.7)
 		soundCaption("[A voice that is everyone's voice at once, then silence]")
 	end,
+	Wake = function(payload)
+		controllers.AudioController:Play(payload.soundId, 0.9)
+		soundCaption("[Wood creaks and cracks, then a deep breath]")
+	end,
+	Brazier = function(payload)
+		controllers.AudioController:Play(payload.soundId, 0.9)
+		flash(Color3.fromRGB(255, 190, 110), 0.2, 0.6)
+		soundCaption("[Fire roars up in the stone bowl]")
+	end,
+	GazeSting = function(payload)
+		controllers.AudioController:Play(payload.soundId, 1)
+		controllers.FearController:Shake(0.25, 0.5)
+		soundCaption("[A low groan, like a whole tree bending]")
+	end,
+	Remember = function()
+		flash(Color3.fromRGB(255, 230, 170), 0.3, 2.5)
+		controllers.FearController:Shake(0.3, 2)
+		soundCaption("[The whole forest sighs]")
+	end,
 	TrustConfirmed = function()
 		flash(Color3.fromRGB(150, 230, 160), 0.2, 0.6)
 	end,
@@ -214,6 +233,31 @@ function AtmosphereController:Start()
 		end
 	end)
 	Net.Event("WalkiePing").OnClientEvent:Connect(showPing)
+
+	-- Chapter 4: the screen glows gold while The Hollow One's gaze is on you.
+	local gazeFrame = Instance.new("Frame")
+	gazeFrame.Size = UDim2.fromScale(1, 1)
+	gazeFrame.BorderSizePixel = 0
+	gazeFrame.BackgroundColor3 = Color3.fromRGB(255, 200, 110)
+	gazeFrame.BackgroundTransparency = 1
+	gazeFrame.Parent = gui
+	local gazeLabel = Instance.new("TextLabel")
+	gazeLabel.AnchorPoint = Vector2.new(0.5, 0)
+	gazeLabel.Position = UDim2.new(0.5, 0, 0.22, 0)
+	gazeLabel.Size = UDim2.fromOffset(520, 40)
+	gazeLabel.BackgroundTransparency = 1
+	gazeLabel.Font = Enum.Font.GothamBold
+	gazeLabel.TextSize = 24
+	gazeLabel.TextColor3 = Color3.fromRGB(255, 230, 170)
+	gazeLabel.TextStrokeTransparency = 0.3
+	gazeLabel.Text = "It sees you! Get behind a stone!"
+	gazeLabel.Visible = false
+	gazeLabel.Parent = gui
+	player:GetAttributeChangedSignal("Gaze"):Connect(function()
+		local gaze = player:GetAttribute("Gaze") or 0
+		gazeFrame.BackgroundTransparency = 1 - 0.45 * math.clamp(gaze, 0, 1)
+		gazeLabel.Visible = gaze > 0.15
+	end)
 
 	if ReplicatedStorage:GetAttribute("PlaceRole") ~= "Lobby" then
 		buildRain()

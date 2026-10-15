@@ -47,6 +47,14 @@ local INTROS = {
 		},
 		after = "The helicopter has landed in a field. The pilot is gone. Somewhere in the fog, a village.",
 	},
+	[4] = {
+		lines = {
+			{ "[Water laps against the hull. The engine cuts out]", "Sound" },
+			{ "{name}: \"We're going the wrong way. We're going INTO the forest.\"", "Story" },
+			{ "[The ferryman, quietly] \"You can't leave until they can. Bring them home.\"", "Radio" },
+		},
+		after = "The far shore. The oldest part of Hollow Pines. Somewhere in there are the people it took.",
+	},
 }
 
 local function playLaterIntro(data, frame: Frame, label: TextLabel)
@@ -136,9 +144,25 @@ local function buildPhoto(parent: Frame, userIds: { number }, scene: string?)
 	end
 	local tower = scene == "Tower"
 	local ferry = scene == "Ferry"
+	local home = scene == "Home"
 	-- Where the group stands: beside the bus, up on the lookout platform, or at the ferry rail.
 	local standY = if tower then 30 elseif ferry then 4.5 else 3
-	if ferry then
+	if home then
+		-- The school car park in daylight: the bus (fixed), the school, everyone home.
+		block(Vector3.new(200, 1, 200), CFrame.new(0, -0.5, 0), Color3.fromRGB(70, 70, 74), Enum.Material.Asphalt)
+		block(Vector3.new(60, 18, 10), CFrame.new(0, 9, -30), Color3.fromRGB(170, 90, 70), Enum.Material.Brick)
+		block(Vector3.new(30, 9, 9), CFrame.new(-12, 4.5, -12), Color3.fromRGB(235, 180, 40), Enum.Material.Metal)
+		local adults = { Color3.fromRGB(60, 70, 110), Color3.fromRGB(46, 58, 40), Color3.fromRGB(150, 60, 50) }
+		for i, color in adults do
+			local x = 10 + i * 3
+			block(Vector3.new(2.2, 4.4, 1.2), CFrame.new(x, 4.4, 2), color)
+			block(Vector3.new(1.3, 1.3, 1.3), CFrame.new(x, 7.3, 2), Color3.fromRGB(234, 184, 146))
+			block(Vector3.new(1.8, 2.2, 1), CFrame.new(x, 1.1, 2), Color3.fromRGB(40, 40, 50))
+		end
+		-- The seedling, small and green at the bottom of the frame.
+		block(Vector3.new(0.2, 1.2, 0.2), CFrame.new(1, 0.6, 14), Color3.fromRGB(90, 60, 40), Enum.Material.Wood)
+		UIKit.new("Part", { Anchored = true, Shape = Enum.PartType.Ball, Size = Vector3.new(1.4, 1.4, 1.4), CFrame = CFrame.new(1, 1.6, 14), Color = Color3.fromRGB(70, 140, 70), Material = Enum.Material.Grass, Parent = world })
+	elseif ferry then
 		block(Vector3.new(200, 1, 200), CFrame.new(0, -0.5, 0), Color3.fromRGB(60, 80, 96), Enum.Material.Glass)
 		block(Vector3.new(34, 2, 14), CFrame.new(0, 1, 4), Color3.fromRGB(225, 225, 215), Enum.Material.Metal)
 		block(Vector3.new(34, 3, 0.4), CFrame.new(0, 3.5, 10.8), Color3.fromRGB(200, 200, 200), Enum.Material.Metal)
@@ -162,10 +186,10 @@ local function buildPhoto(parent: Frame, userIds: { number }, scene: string?)
 		block(Vector3.new(2.2, 5, 1.2), CFrame.new(12, 4.5, 8), coat)
 		block(Vector3.new(3, 0.4, 3), CFrame.new(12, 8, 8), Color3.fromRGB(90, 70, 40))
 		block(Vector3.new(0.8, 1, 0.8), CFrame.new(13.6, 7.5, 8.6), Color3.fromRGB(255, 200, 110), Enum.Material.Neon)
-	else
+	elseif not home then
 		block(Vector3.new(10, 9, 30), CFrame.new(-6, 4.5, -10) * CFrame.Angles(0, math.rad(70), math.rad(4)), Color3.fromRGB(225, 170, 40), Enum.Material.Metal)
 	end
-	for i = 1, if ferry then 0 else 14 do
+	for i = 1, if ferry or home then 0 else 14 do
 		local x = -40 + i * 6 + math.random(-2, 2)
 		local z = -30 - math.random(0, 18)
 		block(Vector3.new(2, 30, 2), CFrame.new(x, 15, z), Color3.fromRGB(30, 24, 20), Enum.Material.Wood)
@@ -188,6 +212,16 @@ local function buildPhoto(parent: Frame, userIds: { number }, scene: string?)
 				copy.Parent = world
 			end
 		end
+	end
+
+	-- At home: no monsters. Just everyone, and the seedling.
+	if home then
+		local camera = Instance.new("Camera")
+		camera.FieldOfView = 50
+		camera.CFrame = CFrame.lookAt(Vector3.new(4, 6, 26), Vector3.new(4, 4, -6))
+		camera.Parent = viewport
+		viewport.CurrentCamera = camera
+		return
 	end
 
 	-- On the ferry: one more of you than there should be, and it has no face.
@@ -248,7 +282,7 @@ local function playEnding(data)
 	buildPhoto(photoArea, data.userIds, data.scene)
 	UIKit.text({ Position = UDim2.new(0, 20, 1, -76), Size = UDim2.new(1, -40, 0, 50), Font = Enum.Font.IndieFlower, TextSize = 28, TextXAlignment = Enum.TextXAlignment.Center, TextColor3 = Color3.fromRGB(40, 40, 60), Text = "say cheese :)", ZIndex = 23, Parent = polaroid })
 
-	local story = UIKit.text({ AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.new(0.5, 0, 0.42, 250), Size = UDim2.new(0.8, 0, 0, 110), Font = UIKit.Theme.Story, TextSize = 19, TextXAlignment = Enum.TextXAlignment.Center, TextTransparency = 1, ZIndex = 22, Text = data.text, Parent = frame })
+	local story = UIKit.text({ AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.new(0.5, 0, 0.42, 250), Size = UDim2.new(0.8, 0, 0, 170), TextWrapped = true, Font = UIKit.Theme.Story, TextSize = 19, TextXAlignment = Enum.TextXAlignment.Center, TextTransparency = 1, ZIndex = 22, Text = data.text, Parent = frame })
 	TweenService:Create(story, TweenInfo.new(2), { TextTransparency = 0 }):Play()
 	task.wait(data.hold)
 	fade(frame, nil, 1, 1.5)

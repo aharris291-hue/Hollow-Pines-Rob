@@ -16,6 +16,8 @@ return {
 		{ id = "HideFromRanger", text = "Hide from The Ranger twice", event = "HidFromRanger", chapter = 2, goal = 2, embers = 80, xp = 100 },
 		{ id = "ExposeMimic", text = "Expose The Mimic with a handshake", event = "MimicRevealed", chapter = 3, goal = 1, embers = 90, xp = 110 },
 		{ id = "Handshakes", text = "Shake hands with teammates 3 times", event = "Handshake", chapter = 3, goal = 3, embers = 60, xp = 70 },
+		{ id = "WakeLost", text = "Wake one of the lost", event = "LostFreed", chapter = 4, goal = 1, embers = 80, xp = 100 },
+		{ id = "LightFires", text = "Light 2 stone fires", event = "BrazierLit", chapter = 4, goal = 2, embers = 90, xp = 110 },
 		{ id = "Pings", text = "Ping your team 5 times", event = "WalkiePing", goal = 5, embers = 40, xp = 50 },
 	},
 }

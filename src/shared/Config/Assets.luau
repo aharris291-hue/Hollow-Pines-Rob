@@ -23,6 +23,8 @@ return {
 		Padlock = 0,
 		Bell = 0,
 		FerryHorn = 0,
+		Wake = 0,
+		Brazier = 0,
 	},
 	Images = {
 		Logo = 0,

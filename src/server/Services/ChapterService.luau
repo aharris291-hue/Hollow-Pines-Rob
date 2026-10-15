@@ -306,6 +306,8 @@ local function resetRun()
 	for _, player in Players:GetPlayers() do
 		player:SetAttribute("Fuses", nil)
 		player:SetAttribute("Hidden", nil)
+		player:SetAttribute("Flame", nil)
+		player:SetAttribute("Gaze", nil)
 	end
 
 	refs = chapter.buildMap()

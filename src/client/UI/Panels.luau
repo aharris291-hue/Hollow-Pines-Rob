@@ -137,7 +137,7 @@ function Panels:Results(result)
 		table.insert(lines, "First escape bonus!")
 	end
 	UIKit.text({ Position = UDim2.fromOffset(0, 44), Size = UDim2.new(1, 0, 0, 150), TextSize = 18, TextXAlignment = Enum.TextXAlignment.Center, TextYAlignment = Enum.TextYAlignment.Top, Text = table.concat(lines, "\n"), Parent = frame })
-	UIKit.text({ Position = UDim2.fromOffset(0, 200), Size = UDim2.new(1, 0, 0, 40), TextSize = 14, TextColor3 = Theme.Muted, TextXAlignment = Enum.TextXAlignment.Center, Text = if (result.chapter or 1) < #Chapters then string.format("Chapter %d is unlocked. Pick it in the lobby.", (result.chapter or 1) + 1) else "More chapters are coming. The forest isn't finished with you.", Parent = frame })
+	UIKit.text({ Position = UDim2.fromOffset(0, 200), Size = UDim2.new(1, 0, 0, 40), TextSize = 14, TextColor3 = Theme.Muted, TextXAlignment = Enum.TextXAlignment.Center, Text = if (result.chapter or 1) < #Chapters then string.format("Chapter %d is unlocked. Pick it in the lobby.", (result.chapter or 1) + 1) else "You finished The Hollow Pines. Thank you for playing!", Parent = frame })
 	if result.canReturn then
 		UIKit.button("Back to camp", { AnchorPoint = Vector2.new(0.5, 1), Position = UDim2.new(0.5, 0, 1, 0), Size = UDim2.fromOffset(180, 38), Parent = frame }, function()
 			Net.Event("ReturnToLobby"):FireServer()

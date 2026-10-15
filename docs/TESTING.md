@@ -7,14 +7,14 @@ lune run tests/run
 ```
 
 - Compiles every `.luau` file in `src/` (catches syntax errors).
-- Unit specs in `tests/specs/` for the pure modules: fear maths, XP curve, daily quest selection and progress, save reconciliation, radio puzzle codes, rate limiting, signals, The Ranger's hearing, chapter unlocks and the trust rules (alone check, handshake window, bell order).
+- Unit specs in `tests/specs/` for the pure modules: fear maths, XP curve, daily quest selection and progress, save reconciliation, radio puzzle codes, rate limiting, signals, The Ranger's hearing, chapter unlocks and the trust rules (alone check, handshake window, bell order) and The Hollow One's gaze maths.
 
 Code that touches Roblox services is checked in Studio with the list below.
 
 ## Manual playtest checklist
 
 Run in Studio with *Clients and Servers*, once solo and once with 3 players.
-`default.project.json` plays Chapter 1; `solo-chapter2.project.json` plays Chapter 2; `solo-chapter3.project.json` plays Chapter 3.
+`default.project.json` plays Chapter 1; `solo-chapter2.project.json` plays Chapter 2; `solo-chapter3.project.json` plays Chapter 3; `solo-chapter4.project.json` plays Chapter 4.
 
 **Chapter 1 flow**
 - [ ] Intro plays, then everyone wakes in the bus
@@ -53,6 +53,16 @@ Run in Studio with *Clients and Servers*, once solo and once with 3 players.
 - [ ] The copy hunts everyone; the store stays safe; the ferry glides in and reaching the dock end marks you safe
 - [ ] The ferry photograph shows one extra, faceless person; results say "Chapter 3 complete"
 
+**Chapter 4 flow**
+- [ ] Intro shows "Chapter 4 / The Hollow"; everyone starts on the dock; the ferryman's note opens
+- [ ] The cabin is lit and safe; the journal opens; the Watcher appears at the fork, then stalks
+- [ ] Waking a frozen adult needs your light on (a warning otherwise); after 3 s hold they colour in, speak, and a 🔥 floats over you
+- [ ] Entering the clearing opens the big tree's eye; glowing streaks sweep the ground
+- [ ] Standing in the streaks in the open turns the screen gold with a warning, then downs you; behind a stone it does not
+- [ ] Each flame lights one stone fire; with all three lit the "it remembers" lines play
+- [ ] The Watcher chases; the gaze sweeps faster until everyone has left the clearing; reaching the dock end marks you safe
+- [ ] The home photograph (school car park, three adults, seedling) shows; results say "You finished The Hollow Pines"
+
 **Systems**
 - [ ] On a fresh save, tips appear once each (move, interact, light, fear, The Watcher, sprint, revive) and not again after rejoining
 - [ ] Fear rises alone in the dark and falls with light, teammates and in the station
@@ -69,6 +79,6 @@ Run in Studio with *Clients and Servers*, once solo and once with 3 players.
 
 ## Performance targets
 
-- Chapter 1 greybox: about 3,500 parts (650 trees). Chapter 2: about 2,300 parts. Chapter 3: about 2,000 parts. Keep server heartbeat above 55 Hz with 6 players.
+- Chapter 1 greybox: about 3,500 parts (650 trees). Chapter 2: about 2,300 parts. Chapter 3: about 2,000 parts. Chapter 4: about 2,800 parts. Keep server heartbeat above 55 Hz with 6 players.
 - Creature AI ticks at 10 Hz; fear at 4 Hz; equipment at 2 Hz.
 - Profile replication is batched to one message per player per frame.

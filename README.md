@@ -5,8 +5,8 @@ a storm, the driver is gone, and something tall is watching from the trees.
 Atmosphere, suspense and teamwork over gore: nobody dies, caught players are
 "downed" and teammates help them up.
 
-This repository is the full source for **Chapter 1, "The Storm"**, **Chapter 2,
-"The Ranger"** and **Chapter 3, "Voices"**, written in Luau and synced into Roblox Studio with [Rojo](https://rojo.space).
+This repository is the full source for all four chapters of the story: **"The Storm"**,
+**"The Ranger"**, **"Voices"** and the finale **"The Hollow"**, written in Luau and synced into Roblox Studio with [Rojo](https://rojo.space).
 
 ## What's in Chapter 1
 
@@ -34,6 +34,15 @@ wanders off alone → the **secret handshake** (H) proves who is real → three 
 give the order of the chapel bell, school bell and sawmill whistle → ring them in
 order, the ferry answers → run for the dock → one more photograph.
 
+## What's in Chapter 4 (the finale)
+
+Unlocked by escaping Chapter 3. The far shore → Ranger Hale's first journal tells
+the truth about **The Hollow One**, the oldest and loneliest tree in the forest →
+wake the bus driver, Ranger Hale and the pilot with warm light → carry their
+flames past its sweeping gaze (hide behind the standing stones) to three stone
+fires → it remembers, and lets everyone go → the Watcher's last chase to the
+ferry → home.
+
 Systems: fear, sprint/stamina, downed & revive, equipment (flashlight, lantern,
 walkie, camera, calming flask, whistle), noise and hiding, XP and levels, Embers economy, shop, pets, daily
 quests, achievements (with optional badges), lobby chapter select and matchmaking, session-locked
@@ -48,8 +57,8 @@ saves, accessibility settings, game passes and developer products.
    and connect the Rojo plugin.
 4. Press Play. The default project runs **Solo** mode: Chapter 1 starts as soon as
    you spawn. To play Chapter 2, serve `solo-chapter2.project.json` instead
-   (`rojo serve solo-chapter2.project.json`), or `solo-chapter3.project.json` for
-   Chapter 3. Enable *Game Settings → Security → Studio Access to API Services*
+   (`rojo serve solo-chapter2.project.json`), `solo-chapter3.project.json` for
+   Chapter 3 or `solo-chapter4.project.json` for Chapter 4. Enable *Game Settings → Security → Studio Access to API Services*
    to test saving.
 
 Full setup, publishing and monetization steps are in [`docs/`](docs):
@@ -62,7 +71,7 @@ Full setup, publishing and monetization steps are in [`docs/`](docs):
 | [DEPLOYMENT.md](docs/DEPLOYMENT.md) | Publishing the lobby and chapter places |
 | [MONETIZATION.md](docs/MONETIZATION.md) | Passes, products, prices, policy notes |
 | [TESTING.md](docs/TESTING.md) | Automated tests and the manual playtest checklist |
-| [ROADMAP.md](docs/ROADMAP.md) | Phased plan for Chapter 4 and live updates |
+| [ROADMAP.md](docs/ROADMAP.md) | What's done and what's next (polish, launch, live updates) |
 
 ## Tests
 

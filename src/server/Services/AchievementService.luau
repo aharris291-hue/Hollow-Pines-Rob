@@ -29,6 +29,9 @@ local EVENT_STATS = {
 	MimicRevealed = "MimicsRevealed",
 	Handshake = "Handshakes",
 	TapeFound = "TapesFound",
+	Chapter4Completed = "Chapter4Clears",
+	LostFreed = "LostFreed",
+	BrazierLit = "BraziersLit",
 }
 
 local function check(player: Player)
