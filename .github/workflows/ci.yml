@@ -1,0 +1,21 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ok-nick/setup-aftman@v0.4.2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Unit tests and syntax check
+        run: lune run tests/run
+      - name: Build places
+        run: |
+          rojo build default.project.json -o HollowPines.rbxl
+          rojo build lobby.project.json -o Lobby.rbxl
+          rojo build chapter1.project.json -o Chapter1.rbxl
