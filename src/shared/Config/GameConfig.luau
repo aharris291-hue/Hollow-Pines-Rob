@@ -15,6 +15,14 @@ GameConfig.Places = {
 	Chapter4 = 0,
 }
 
+-- Fastest-escape leaderboards on the lobby board (one OrderedDataStore per chapter).
+GameConfig.Leaderboards = {
+	StoreName = "HollowPines_BestTimes_v1_Chapter", -- chapter id is appended
+	Size = 10, -- names shown per chapter
+	RefreshInterval = 90, -- seconds between lobby board refreshes
+	PageSeconds = 8, -- how long the board shows each chapter
+}
+
 GameConfig.Party = {
 	MinPlayers = 1,
 	MaxPlayers = 6,

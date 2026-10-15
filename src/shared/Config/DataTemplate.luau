@@ -62,4 +62,5 @@ return {
 	SecondWinds = 0, -- bought Second Wind revives not yet used
 	SupporterGranted = false,
 	HintsSeen = {}, -- first-time hints already shown: { [hintId] = true }
+	BestTimes = {}, -- fastest escape per chapter in seconds: { ["1"] = 512 }
 }

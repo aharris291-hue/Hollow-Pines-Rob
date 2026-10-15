@@ -9,6 +9,7 @@ local Shared = game:GetService("ReplicatedStorage"):WaitForChild("Shared")
 local Monetization = require(Shared.Config.Monetization)
 local Chapters = require(Shared.Config.Chapters)
 local ChapterUnlock = require(Shared.Util.ChapterUnlock)
+local BestTimes = require(Shared.Util.BestTimes)
 local Net = require(Shared.Util.Net)
 local UIKit = require(script.Parent.UIKit)
 
@@ -137,6 +138,11 @@ function Panels:Results(result)
 	if result.firstClear then
 		table.insert(lines, "First escape bonus!")
 	end
+	if result.personalBest then
+		table.insert(lines, "New best time!")
+	elseif result.best then
+		table.insert(lines, "Your best: " .. BestTimes.format(result.best))
+	end
 	UIKit.text({ Position = UDim2.fromOffset(0, 44), Size = UDim2.new(1, 0, 0, 150), TextSize = 18, TextXAlignment = Enum.TextXAlignment.Center, TextYAlignment = Enum.TextYAlignment.Top, Text = table.concat(lines, "\n"), Parent = frame })
 	UIKit.text({ Position = UDim2.fromOffset(0, 200), Size = UDim2.new(1, 0, 0, 40), TextSize = 14, TextColor3 = Theme.Muted, TextXAlignment = Enum.TextXAlignment.Center, Text = if (result.chapter or 1) < #Chapters then string.format("Chapter %d is unlocked. Pick it in the lobby.", (result.chapter or 1) + 1) else "You finished The Hollow Pines. Thank you for playing!", Parent = frame })
 	if result.canReturn then
@@ -185,7 +191,9 @@ function Panels:Lobby()
 		if info and #info.names > 0 then
 			status.Text = string.format("%d/%d boarding · leaving in %ds", #info.names, lastQueue.max, info.countdown or 0)
 		else
-			status.Text = "Up to " .. (if lastQueue then lastQueue.max else 6) .. " players"
+			local profile = self.controllers.DataController.Profile
+			local best = profile and profile.BestTimes and profile.BestTimes[tostring(current.id)]
+			status.Text = "Up to " .. (if lastQueue then lastQueue.max else 6) .. " players" .. (if best then "  ·  Your best " .. BestTimes.format(best) else "")
 		end
 	end
 

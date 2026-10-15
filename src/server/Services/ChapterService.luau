@@ -373,6 +373,7 @@ local function grantRewards()
 			end)
 			local xp = GameConfig.Rewards.ChapterCompleteXP + (if flawless then GameConfig.Rewards.SurvivedWithoutDownBonusXP else 0)
 			services.ProgressionService:AddXP(player, xp)
+			local isBest, best = services.LeaderboardService:Submit(player, chapter.id, elapsed)
 			EventBus.Fire("ChapterCompleted", player)
 			EventBus.Fire("Chapter" .. key .. "Completed", player)
 			if flawless then
@@ -386,6 +387,8 @@ local function grantRewards()
 				flawless = flawless,
 				firstClear = firstClear,
 				seconds = elapsed,
+				personalBest = isBest,
+				best = best,
 				canReturn = GameConfig.Places.Lobby ~= 0,
 				nextIn = chapter.config.ReturnToLobbyDelay,
 			})
