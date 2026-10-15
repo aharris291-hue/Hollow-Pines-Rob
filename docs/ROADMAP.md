@@ -35,6 +35,11 @@ Core systems, Chapter 1 greybox, lobby, monetization, saves, accessibility, test
 - Done: credits roll after the final photo (edit `Config/Credits.luau`), skippable.
 - Done: an Invite friends button in the lobby.
 
+## Live service 1 (built)
+
+- Done: personal best times per chapter (saved in the profile, shown on the results and the lobby Play panel).
+- Done: a fastest-escapes board in the lobby, the top 10 per chapter from OrderedDataStores (`LeaderboardService`).
+
 ## After the story
 
 - Phase 2's polish list now covers all four chapters: art and audio (`Assets.luau`). Real uploaded animations can replace the hand-made ones later.
@@ -43,5 +48,5 @@ Core systems, Chapter 1 greybox, lobby, monetization, saves, accessibility, test
 ## Live service
 
 - Seasonal events (Halloween storm, winter lights) with limited cosmetics earnable by play.
-- Weekly quest rotations, leaderboards for fastest clears.
+- Weekly quest rotations.
 - New pets and beam colours each update.

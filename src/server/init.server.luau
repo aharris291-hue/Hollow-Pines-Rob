@@ -45,6 +45,7 @@ local COMMON = {
 	"AchievementService",
 	"SettingsService",
 	"PetService",
+	"LeaderboardService",
 }
 
 local BY_ROLE = {

@@ -18,7 +18,7 @@ src/
                          Achievements, Creatures, Monetization, Assets, DataTemplate
     Util/                Net (remotes), Signal, TableUtil, RateLimit and the pure logic
                          modules FearMath, Progression, QuestLogic, PuzzleCode, Hearing,
-                         ChapterUnlock, Trust, Gaze, Gait
+                         ChapterUnlock, Trust, Gaze, Gait, BestTimes
   server/                ServerScriptService.Server
     init.server.luau     Bootstrap: chooses services for the place role, Init then Start
     EventBus.luau        Gameplay facts ("FuseInserted") that quests/achievements listen to
@@ -66,7 +66,7 @@ window, the bell order puzzle) live in `Util/Trust.luau`.
 
 Common services: `DataService`, `EconomyService`, `ProgressionService`,
 `InventoryService`, `MonetizationService`, `QuestService`, `AchievementService`,
-`SettingsService`, `PetService`.
+`SettingsService`, `PetService`, `LeaderboardService` (posts best times; draws the board in the lobby).
 
 ## Service contract
 

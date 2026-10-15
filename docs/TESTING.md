@@ -77,6 +77,9 @@ Run in Studio with *Clients and Servers*, once solo and once with 3 players.
 - [ ] Quests progress and can be claimed once
 - [ ] Settings save and apply (captions, flashing, shake, calmer scares, markers, size, volume)
 - [ ] Leave and rejoin: Embers, level, items and settings persist
+- [ ] Finishing a chapter shows "New best time!" the first time and when faster, otherwise "Your best: m:ss"
+- [ ] Lobby: the board by the campfire flips through the four chapters; in Studio it says times show up once the game is published, live it lists the 10 fastest
+- [ ] Lobby: the Play panel shows "Your best" for chapters you have escaped (needs saving, so Studio API access on or the published game)
 - [ ] Lobby: Invite friends opens the Roblox invite window (published game; Studio shows a short notice instead)
 - [ ] Lobby: Chapter 2 shows locked on a fresh save and unlocked after a Chapter 1 clear; Play queues the picked chapter, countdown runs, group teleports together (published game only)
 
