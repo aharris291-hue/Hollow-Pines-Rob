@@ -35,24 +35,26 @@ end
 
 function Chapter1.applyLighting()
 	Lighting.ClockTime = 0.2
-	Lighting.Brightness = 0.6
-	Lighting.Ambient = Color3.fromRGB(22, 24, 34)
-	Lighting.OutdoorAmbient = Color3.fromRGB(34, 38, 52)
-	Lighting.EnvironmentDiffuseScale = 0.2
+	-- Night, but bright enough to see the shapes of trees without a light.
+	Lighting.Brightness = 1.6
+	Lighting.Ambient = Color3.fromRGB(62, 66, 84)
+	Lighting.OutdoorAmbient = Color3.fromRGB(92, 100, 124)
+	Lighting.EnvironmentDiffuseScale = 0.35
 	Lighting.EnvironmentSpecularScale = 0.2
 	Lighting.GlobalShadows = true
 	local atmosphere = Lighting:FindFirstChildOfClass("Atmosphere") or Instance.new("Atmosphere")
-	atmosphere.Density = 0.42
+	atmosphere.Density = 0.3
 	atmosphere.Offset = 0.1
-	atmosphere.Color = Color3.fromRGB(70, 80, 100)
-	atmosphere.Decay = Color3.fromRGB(30, 32, 44)
+	atmosphere.Color = Color3.fromRGB(90, 100, 122)
+	atmosphere.Decay = Color3.fromRGB(50, 54, 70)
 	atmosphere.Glare = 0
-	atmosphere.Haze = 2.2
+	atmosphere.Haze = 1.4
 	atmosphere.Parent = Lighting
 	local grade = Lighting:FindFirstChild("StormGrade") or Instance.new("ColorCorrectionEffect")
 	grade.Name = "StormGrade"
-	grade.Saturation = -0.35
-	grade.Contrast = 0.1
+	grade.Saturation = -0.3
+	grade.Contrast = 0.05
+	grade.Brightness = 0.04
 	grade.TintColor = Color3.fromRGB(215, 225, 255)
 	grade.Parent = Lighting
 end

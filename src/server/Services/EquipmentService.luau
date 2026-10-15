@@ -96,7 +96,7 @@ local function buildTool(player: Player, itemId: string): Tool?
 		light.Face = Enum.NormalId.Front
 		light.Range = item.range
 		light.Brightness = item.brightness
-		light.Angle = 55
+		light.Angle = item.angle or 55
 		light.Shadows = true
 		light.Enabled = false
 		light.Parent = handle

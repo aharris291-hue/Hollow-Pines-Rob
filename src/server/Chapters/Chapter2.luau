@@ -36,24 +36,26 @@ end
 
 function Chapter2.applyLighting()
 	Lighting.ClockTime = 1.5
-	Lighting.Brightness = 0.8
-	Lighting.Ambient = Color3.fromRGB(24, 28, 36)
-	Lighting.OutdoorAmbient = Color3.fromRGB(40, 48, 62)
-	Lighting.EnvironmentDiffuseScale = 0.25
+	-- Moonlit: you can see the camp, but not what's in the shadows.
+	Lighting.Brightness = 1.8
+	Lighting.Ambient = Color3.fromRGB(64, 70, 86)
+	Lighting.OutdoorAmbient = Color3.fromRGB(98, 108, 130)
+	Lighting.EnvironmentDiffuseScale = 0.4
 	Lighting.EnvironmentSpecularScale = 0.3
 	Lighting.GlobalShadows = true
 	local atmosphere = Lighting:FindFirstChildOfClass("Atmosphere") or Instance.new("Atmosphere")
-	atmosphere.Density = 0.38
+	atmosphere.Density = 0.28
 	atmosphere.Offset = 0.15
-	atmosphere.Color = Color3.fromRGB(90, 100, 115)
-	atmosphere.Decay = Color3.fromRGB(36, 40, 52)
+	atmosphere.Color = Color3.fromRGB(105, 115, 130)
+	atmosphere.Decay = Color3.fromRGB(54, 60, 74)
 	atmosphere.Glare = 0
-	atmosphere.Haze = 2.6
+	atmosphere.Haze = 1.6
 	atmosphere.Parent = Lighting
 	local grade = Lighting:FindFirstChild("StormGrade") or Instance.new("ColorCorrectionEffect")
 	grade.Name = "StormGrade"
-	grade.Saturation = -0.3
-	grade.Contrast = 0.12
+	grade.Saturation = -0.25
+	grade.Contrast = 0.06
+	grade.Brightness = 0.04
 	grade.TintColor = Color3.fromRGB(210, 228, 240)
 	grade.Parent = Lighting
 end
