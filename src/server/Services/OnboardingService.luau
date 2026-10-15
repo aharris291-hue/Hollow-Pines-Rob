@@ -29,6 +29,8 @@ local HINTS = {
 	Noise = "Running and splashing through water make noise. Walk slowly to stay quiet.",
 	Hide = "Stand still inside a tent to hide. The Ranger can't find you there.",
 	Whistle = "Press 3, or tap the whistle, to blow it. The Ranger will go to the sound, away from your friends.",
+	Handshake = "Press H, or tap Shake, next to someone to offer the secret handshake. Real friends shake back. The Mimic can't.",
+	Together = "The Mimic only catches people who are alone. Stay close to your friends.",
 }
 
 local services
@@ -58,6 +60,8 @@ function OnboardingService:Start()
 			self:Hint(player, "Watcher")
 		elseif name == "RangerSpotted" and player then
 			self:Hint(player, "Hide")
+		elseif name == "CopySeen" and player then
+			self:Hint(player, "Together")
 		end
 	end)
 

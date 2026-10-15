@@ -22,10 +22,11 @@ end
 local function resolveRole(): string
 	if GameConfig.Places.Lobby ~= 0 and game.PlaceId == GameConfig.Places.Lobby then
 		return "Lobby"
-	elseif GameConfig.Places.Chapter1 ~= 0 and game.PlaceId == GameConfig.Places.Chapter1 then
-		return "Chapter1"
-	elseif GameConfig.Places.Chapter2 ~= 0 and game.PlaceId == GameConfig.Places.Chapter2 then
-		return "Chapter2"
+	end
+	for key, placeId in GameConfig.Places do
+		if key ~= "Lobby" and placeId ~= 0 and game.PlaceId == placeId then
+			return key -- "Chapter1", "Chapter2", ...
+		end
 	end
 	-- Unpublished or Studio: the Rojo project decides (default.project.json = Solo).
 	return ReplicatedStorage:GetAttribute("PlaceRole") or "Solo"
@@ -48,10 +49,9 @@ local COMMON = {
 
 local BY_ROLE = {
 	Lobby = { "LobbyService", "MatchmakingService" },
-	Chapter1 = { "PlayerStateService", "EquipmentService", "NoiseService", "FearService", "CreatureService", "OnboardingService", "ChapterService" },
+	-- Every chapter place (and Solo) runs the same gameplay services.
+	Chapter = { "PlayerStateService", "EquipmentService", "NoiseService", "TrustService", "FearService", "CreatureService", "OnboardingService", "ChapterService" },
 }
-BY_ROLE.Chapter2 = BY_ROLE.Chapter1
-BY_ROLE.Solo = BY_ROLE.Chapter1
 
 local servicesFolder = script:WaitForChild("Services")
 local services = {}
@@ -60,7 +60,7 @@ local order = {}
 for _, name in COMMON do
 	table.insert(order, name)
 end
-for _, name in BY_ROLE[role] do
+for _, name in BY_ROLE[if role == "Lobby" then "Lobby" else "Chapter"] do
 	table.insert(order, name)
 end
 

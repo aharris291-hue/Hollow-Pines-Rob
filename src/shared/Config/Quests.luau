@@ -14,6 +14,8 @@ return {
 		{ id = "Photos", text = "Flash The Watcher with a camera", event = "WatcherFlashed", goal = 1, embers = 90, xp = 110 },
 		{ id = "MapPieces", text = "Find 4 torn map pieces", event = "MapPieceFound", chapter = 2, goal = 4, embers = 70, xp = 90 },
 		{ id = "HideFromRanger", text = "Hide from The Ranger twice", event = "HidFromRanger", chapter = 2, goal = 2, embers = 80, xp = 100 },
+		{ id = "ExposeMimic", text = "Expose The Mimic with a handshake", event = "MimicRevealed", chapter = 3, goal = 1, embers = 90, xp = 110 },
+		{ id = "Handshakes", text = "Shake hands with teammates 3 times", event = "Handshake", chapter = 3, goal = 3, embers = 60, xp = 70 },
 		{ id = "Pings", text = "Ping your team 5 times", event = "WalkiePing", goal = 5, embers = 40, xp = 50 },
 	},
 }

@@ -275,10 +275,10 @@ end
 local function resolveChapter()
 	local role = ReplicatedStorage:GetAttribute("PlaceRole")
 	local id = 1
-	if role == "Chapter2" then
-		id = 2
-	elseif role == "Solo" then
+	if role == "Solo" then
 		id = ReplicatedStorage:GetAttribute("SoloChapter") or 1
+	elseif type(role) == "string" then
+		id = tonumber(string.match(role, "^Chapter(%d+)$")) or 1
 	end
 	local module = ChaptersFolder:FindFirstChild("Chapter" .. id) or ChaptersFolder.Chapter1
 	return require(module)
@@ -294,6 +294,9 @@ local function resetRun()
 	services.FearService:ResetAll()
 	if services.NoiseService then
 		services.NoiseService:Clear()
+	end
+	if services.TrustService then
+		services.TrustService:ResetRun()
 	end
 	state.phase = "Waiting"
 	state.code = nil

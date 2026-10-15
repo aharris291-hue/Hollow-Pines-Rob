@@ -1,5 +1,6 @@
--- Sprint (Shift / mobile button), light toggle (F / mobile button) and the
--- camera direction report The Watcher uses to know who is looking at it.
+-- Sprint (Shift / mobile button), light toggle (F / mobile button), the secret
+-- handshake from Chapter 3 (H / mobile button) and the camera direction report
+-- The Watcher uses to know who is looking at it.
 
 local ContextActionService = game:GetService("ContextActionService")
 local Players = game:GetService("Players")
@@ -40,6 +41,27 @@ function InputController:Start()
 	end, true, Enum.KeyCode.F, Enum.KeyCode.ButtonY)
 	ContextActionService:SetTitle("ToggleLight", "Light")
 	ContextActionService:SetPosition("ToggleLight", UDim2.new(1, -170, 1, -90))
+
+	local function bindHandshake()
+		ContextActionService:BindAction("Handshake", function(_, inputState)
+			if inputState == Enum.UserInputState.Begin then
+				Net.Event("Handshake"):FireServer()
+			end
+			return Enum.ContextActionResult.Pass
+		end, true, Enum.KeyCode.H, Enum.KeyCode.ButtonX)
+		ContextActionService:SetTitle("Handshake", "Shake")
+		ContextActionService:SetPosition("Handshake", UDim2.new(1, -230, 1, -90))
+	end
+	-- The chapter id arrives as an attribute once the server has picked it.
+	if (ReplicatedStorage:GetAttribute("Chapter") or 1) >= 3 then
+		bindHandshake()
+	else
+		ReplicatedStorage:GetAttributeChangedSignal("Chapter"):Connect(function()
+			if (ReplicatedStorage:GetAttribute("Chapter") or 1) >= 3 then
+				bindHandshake()
+			end
+		end)
+	end
 
 	local camera = workspace.CurrentCamera
 	local lastSent = Vector3.zero

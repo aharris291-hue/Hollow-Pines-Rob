@@ -137,6 +137,24 @@ local EFFECTS = {
 			glow:Destroy()
 		end)
 	end,
+	Bell = function(payload)
+		controllers.AudioController:Play(payload.soundId, 1)
+		soundCaption("[A bell rings out across the fog]")
+	end,
+	FerryHorn = function(payload)
+		controllers.AudioController:Play(payload.soundId, 1)
+		controllers.FearController:Shake(0.1, 1)
+		soundCaption("[A deep ferry horn, far across the water]")
+	end,
+	MimicRevealed = function(payload)
+		controllers.AudioController:Play(payload.soundId, 1)
+		controllers.FearController:Shake(0.4, 0.6)
+		flash(Color3.fromRGB(200, 170, 255), 0.35, 0.7)
+		soundCaption("[A voice that is everyone's voice at once, then silence]")
+	end,
+	TrustConfirmed = function()
+		flash(Color3.fromRGB(150, 230, 160), 0.2, 0.6)
+	end,
 	Helicopter = function(payload)
 		controllers.AudioController:Play(payload.soundId, 1)
 		controllers.FearController:Shake(0.15, 2)

@@ -28,18 +28,42 @@ local function fade(frame: Frame, label: TextLabel?, to: number, seconds: number
 	task.wait(seconds)
 end
 
-local function playRangerIntro(data, frame: Frame, label: TextLabel)
+-- Intros for chapters after the first: three captions over black, then a line
+-- once the screen clears. {name} is a random player in the group.
+local INTROS = {
+	[2] = {
+		lines = {
+			{ "[An engine idles. Rain ticks on the roof of the rescue truck]", "Sound" },
+			{ "{name}: \"Why did we stop? Where did the driver go?\"", "Story" },
+			{ "[Walkie, crackling] \"...truck seven, report... truck seven...\"", "Radio" },
+		},
+		after = "The rescue truck stopped at the gate of an old campground. The driver is gone.",
+	},
+	[3] = {
+		lines = {
+			{ "[Rotor blades slow down. Fog presses against the windows]", "Sound" },
+			{ "{name}: \"This isn't the hospital. Where are we?\"", "Story" },
+			{ "[Headset, in the pilot's voice] \"Everybody out. You'll be safe here.\"", "Radio" },
+		},
+		after = "The helicopter has landed in a field. The pilot is gone. Somewhere in the fog, a village.",
+	},
+}
+
+local function playLaterIntro(data, frame: Frame, label: TextLabel)
 	local someone = if data.names and #data.names > 0 then data.names[math.random(#data.names)] else player.DisplayName
-	controllers.UIController:Caption("[An engine idles. Rain ticks on the roof of the rescue truck]", "Sound")
-	task.wait(1.5)
-	controllers.UIController:Caption(string.format("%s: \"Why did we stop? Where did the driver go?\"", someone), "Story")
-	task.wait(2.2)
-	controllers.UIController:Caption("[Walkie, crackling] \"...truck seven, report... truck seven...\"", "Radio")
+	local intro = INTROS[data.chapter] or INTROS[2]
+	for i, line in intro.lines do
+		local text = string.gsub(line[1], "{name}", someone)
+		controllers.UIController:Caption(text, line[2])
+		if i < #intro.lines then
+			task.wait(if i == 1 then 1.5 else 2.2)
+		end
+	end
 	task.wait(math.max(0.5, data.length - 10))
 	label.Text = ""
 	fade(frame, label, 1, 1.5)
 	frame:Destroy()
-	controllers.UIController:Caption("The rescue truck stopped at the gate of an old campground. The driver is gone.", "Story")
+	controllers.UIController:Caption(intro.after, "Story")
 end
 
 local function playIntro(data)
@@ -51,7 +75,7 @@ local function playIntro(data)
 	label.Text = ""
 	fade(frame, nil, 0.25, 0.8)
 	if (data.chapter or 1) ~= 1 then
-		playRangerIntro(data, frame, label)
+		playLaterIntro(data, frame, label)
 		return
 	end
 
@@ -111,10 +135,20 @@ local function buildPhoto(parent: Frame, userIds: { number }, scene: string?)
 		UIKit.new("Part", { Anchored = true, Size = size, CFrame = cframe, Color = color, Material = material or Enum.Material.SmoothPlastic, Parent = world })
 	end
 	local tower = scene == "Tower"
-	-- Where the group stands: beside the bus, or up on the lookout platform.
-	local standY = if tower then 30 else 3
-	block(Vector3.new(200, 1, 200), CFrame.new(0, -0.5, 0), Color3.fromRGB(40, 50, 36), Enum.Material.Grass)
-	if tower then
+	local ferry = scene == "Ferry"
+	-- Where the group stands: beside the bus, up on the lookout platform, or at the ferry rail.
+	local standY = if tower then 30 elseif ferry then 4.5 else 3
+	if ferry then
+		block(Vector3.new(200, 1, 200), CFrame.new(0, -0.5, 0), Color3.fromRGB(60, 80, 96), Enum.Material.Glass)
+		block(Vector3.new(34, 2, 14), CFrame.new(0, 1, 4), Color3.fromRGB(225, 225, 215), Enum.Material.Metal)
+		block(Vector3.new(34, 3, 0.4), CFrame.new(0, 3.5, 10.8), Color3.fromRGB(200, 200, 200), Enum.Material.Metal)
+	else
+		block(Vector3.new(200, 1, 200), CFrame.new(0, -0.5, 0), Color3.fromRGB(40, 50, 36), Enum.Material.Grass)
+	end
+	if ferry then
+		-- The fog bank behind the boat, and the dock fading into it.
+		block(Vector3.new(8, 1, 30), CFrame.new(-14, 0.5, -30), Color3.fromRGB(96, 70, 48), Enum.Material.WoodPlanks)
+	elseif tower then
 		local wood = Color3.fromRGB(96, 70, 48)
 		for _, x in { -9, 9 } do
 			for _, z in { -3, 9 } do
@@ -131,7 +165,7 @@ local function buildPhoto(parent: Frame, userIds: { number }, scene: string?)
 	else
 		block(Vector3.new(10, 9, 30), CFrame.new(-6, 4.5, -10) * CFrame.Angles(0, math.rad(70), math.rad(4)), Color3.fromRGB(225, 170, 40), Enum.Material.Metal)
 	end
-	for i = 1, 14 do
+	for i = 1, if ferry then 0 else 14 do
 		local x = -40 + i * 6 + math.random(-2, 2)
 		local z = -30 - math.random(0, 18)
 		block(Vector3.new(2, 30, 2), CFrame.new(x, 15, z), Color3.fromRGB(30, 24, 20), Enum.Material.Wood)
@@ -154,6 +188,34 @@ local function buildPhoto(parent: Frame, userIds: { number }, scene: string?)
 				copy.Parent = world
 			end
 		end
+	end
+
+	-- On the ferry: one more of you than there should be, and it has no face.
+	if ferry then
+		local templates = world:GetChildren()
+		local template = nil
+		for _, child in templates do
+			if child:IsA("Model") then
+				template = child
+			end
+		end
+		if template then
+			local extra = template:Clone()
+			for _, descendant in extra:GetDescendants() do
+				if descendant:IsA("Decal") and descendant.Parent and descendant.Parent.Name == "Head" then
+					descendant.Transparency = 1
+				end
+			end
+			count += 1
+			extra:PivotTo(CFrame.new((count - 1) * 3.4 - count * 1.7 + 1.7, standY, 4))
+			extra.Parent = world
+		end
+		local camera = Instance.new("Camera")
+		camera.FieldOfView = 50
+		camera.CFrame = CFrame.lookAt(Vector3.new(0, 6.5, 26), Vector3.new(0, 5, -6))
+		camera.Parent = viewport
+		viewport.CurrentCamera = camera
+		return
 	end
 
 	-- And somewhere it shouldn't be, something tall: between the trees behind

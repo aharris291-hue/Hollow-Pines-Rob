@@ -176,6 +176,15 @@ function Mimic:_vanishDecoy(spooked: boolean)
 	end
 end
 
+-- A walkie ping "from" a teammate, at a place that teammate has never been.
+function Mimic:FakePing(viewers: { Player }, from: Player, position: Vector3)
+	for _, player in viewers do
+		if player ~= from then
+			Net.Event("WalkiePing"):FireClient(player, from, position)
+		end
+	end
+end
+
 function Mimic:SetActive(active: boolean)
 	self.active = active
 	self.timer = math.random(CONFIG.voiceInterval[1], CONFIG.voiceInterval[2]) * 0.5
