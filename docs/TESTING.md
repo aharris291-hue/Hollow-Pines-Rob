@@ -7,14 +7,14 @@ lune run tests/run
 ```
 
 - Compiles every `.luau` file in `src/` (catches syntax errors).
-- Unit specs in `tests/specs/` for the pure modules: fear maths, XP curve, daily quest selection and progress, save reconciliation, radio puzzle codes, rate limiting, signals, The Ranger's hearing and chapter unlocks.
+- Unit specs in `tests/specs/` for the pure modules: fear maths, XP curve, daily quest selection and progress, save reconciliation, radio puzzle codes, rate limiting, signals, The Ranger's hearing, chapter unlocks and the trust rules (alone check, handshake window, bell order).
 
 Code that touches Roblox services is checked in Studio with the list below.
 
 ## Manual playtest checklist
 
 Run in Studio with *Clients and Servers*, once solo and once with 3 players.
-`default.project.json` plays Chapter 1; `solo-chapter2.project.json` plays Chapter 2.
+`default.project.json` plays Chapter 1; `solo-chapter2.project.json` plays Chapter 2; `solo-chapter3.project.json` plays Chapter 3.
 
 **Chapter 1 flow**
 - [ ] Intro plays, then everyone wakes in the bus
@@ -41,6 +41,18 @@ Run in Studio with *Clients and Servers*, once solo and once with 3 players.
 - [ ] After about 45 s the landing light comes on, he backs off, then hunts; reaching the pad marks you safe
 - [ ] The tower photograph ending and results ("Chapter 2 complete") show
 
+**Chapter 3 flow**
+- [ ] Intro shows "Chapter 3 / Voices"; everyone starts by the helicopter; the pilot's seat note opens
+- [ ] Fog is thick but the street is readable; entering the village starts whispers (and, with 2+ players, fake walkie pings)
+- [ ] The store is lit and safe; the tape plays Hale's lines and the handshake tip shows
+- [ ] A copy of a player waits in the street; it slides, has no light, and creeps toward the group
+- [ ] H / Shake next to a teammate: they get a prompt; shaking back shows a green flash and "It's really them" for both
+- [ ] H / Shake next to the copy: purple flash, it vanishes and comes back later elsewhere
+- [ ] Walking off alone: the copy comes for you and catches you; next to a friend it only follows
+- [ ] Three tapes spawn and each names one signal and its position; ringing out of order resets, the right order makes the ferry horn sound
+- [ ] The copy hunts everyone; the store stays safe; the ferry glides in and reaching the dock end marks you safe
+- [ ] The ferry photograph shows one extra, faceless person; results say "Chapter 3 complete"
+
 **Systems**
 - [ ] On a fresh save, tips appear once each (move, interact, light, fear, The Watcher, sprint, revive) and not again after rejoining
 - [ ] Fear rises alone in the dark and falls with light, teammates and in the station
@@ -57,6 +69,6 @@ Run in Studio with *Clients and Servers*, once solo and once with 3 players.
 
 ## Performance targets
 
-- Chapter 1 greybox: about 3,500 parts (650 trees). Chapter 2: about 2,300 parts. Keep server heartbeat above 55 Hz with 6 players.
+- Chapter 1 greybox: about 3,500 parts (650 trees). Chapter 2: about 2,300 parts. Chapter 3: about 2,000 parts. Keep server heartbeat above 55 Hz with 6 players.
 - Creature AI ticks at 10 Hz; fear at 4 Hz; equipment at 2 Hz.
 - Profile replication is batched to one message per player per frame.

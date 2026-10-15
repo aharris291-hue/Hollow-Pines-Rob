@@ -12,6 +12,7 @@ local Creatures = script.Parent.Parent:WaitForChild("Creatures")
 local Watcher = require(Creatures.Watcher)
 local Mimic = require(Creatures.Mimic)
 local Ranger = require(Creatures.Ranger)
+local Copy = require(Creatures.Copy)
 
 local CreatureService = {}
 
@@ -74,7 +75,7 @@ function CreatureService:Spawn(chapterId: number?)
 			services.FearService:Spike(player, amount)
 		end,
 	})
-	if (chapterId or 1) >= 2 then
+	if (chapterId or 1) == 2 then
 		local refs = services.ChapterService:GetRefs()
 		self.ranger = Ranger.new({
 			getTargets = activeTargets,
@@ -109,10 +110,40 @@ function CreatureService:Spawn(chapterId: number?)
 			end,
 		})
 	end
+	if (chapterId or 1) >= 3 then
+		local refs = services.ChapterService:GetRefs()
+		self.copy = Copy.new({
+			getTargets = activeTargets,
+			isAlone = function(player)
+				return services.TrustService:IsAlone(player)
+			end,
+			isSafe = function(position)
+				return services.ChapterService:IsInSafeZone(position)
+			end,
+			spawnPoints = refs.CopySpawns,
+			onAppear = function(wearing, near)
+				EventBus.Fire("CopySeen", near)
+				services.FearService:Spike(near, 8)
+				if wearing ~= near then
+					Net.Event("Caption"):FireClient(near, string.format("[Footsteps in the fog] \"%s? Is that you?\"", wearing.DisplayName), "Mimic")
+				end
+			end,
+			onCatch = function(player)
+				services.PlayerStateService:Down(player, "The Mimic")
+			end,
+			onReveal = function(by)
+				Net.Event("ScreenEffect"):FireAllClients("MimicRevealed", { soundId = Assets.Sounds.MimicWhisper })
+				Net.Event("Caption"):FireAllClients(string.format("%s offered the handshake. It didn't shake back. Its face slid off, and it was gone.", by.DisplayName), "Mimic")
+				for _, player in activeTargets() do
+					services.FearService:Spike(player, 6)
+				end
+			end,
+		})
+	end
 end
 
 function CreatureService:Despawn()
-	for _, key in { "watcher", "mimic", "ranger" } do
+	for _, key in { "watcher", "mimic", "ranger", "copy" } do
 		if self[key] then
 			self[key]:Destroy()
 			self[key] = nil
@@ -123,7 +154,7 @@ end
 -- Distance from a position to the nearest visible threat, for the fear system.
 function CreatureService:ThreatDistance(position: Vector3): number?
 	local nearest = nil
-	for _, creature in { self.watcher, self.ranger } do
+	for _, creature in { self.watcher, self.ranger, self.copy } do
 		local creaturePosition = creature and creature:Position()
 		if creaturePosition then
 			local distance = (creaturePosition - position).Magnitude
@@ -143,7 +174,7 @@ function CreatureService:Flash(player: Player, stunTime: number): boolean
 		return false
 	end
 	local look = looks[player] or root.CFrame.LookVector
-	for _, creature in { self.watcher, self.ranger } do
+	for _, creature in { self.watcher, self.ranger, self.copy } do
 		local creaturePosition = creature and creature:Position()
 		if creaturePosition then
 			local offset = creaturePosition - root.Position
@@ -164,7 +195,7 @@ function CreatureService:Start()
 		local now = os.clock()
 		local dt = now - last
 		last = now
-		for _, key in { "watcher", "mimic", "ranger" } do
+		for _, key in { "watcher", "mimic", "ranger", "copy" } do
 			local creature = self[key]
 			if creature then
 				local ok, err = pcall(creature.Update, creature, dt)

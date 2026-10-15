@@ -1,5 +1,6 @@
--- Creature tuning. Chapter 1 uses The Watcher fully and teases The Mimic.
--- The Ranger and The Hollow One are defined for later chapters (docs/ROADMAP.md).
+-- Creature tuning. The Watcher hunts in Chapter 1, The Ranger in Chapter 2 and
+-- The Mimic (voices, then a walking copy of a player) in Chapter 3. The Hollow
+-- One is defined for Chapter 4 (docs/ROADMAP.md).
 
 return {
 	Watcher = {
@@ -45,6 +46,20 @@ return {
 		catchDistance = 5,
 		pauseAfterCatch = 4,
 		elevatedHeight = 14, -- it will not climb after players higher than this
+	},
+	-- The Mimic's walking form (Chapter 3): a copy of one of the players.
+	Copy = {
+		activeFromChapter = 3,
+		stalkSpeed = 11, -- a walking player (12) can keep away from it
+		huntSpeed = 16,
+		catchDistance = 4.5,
+		followDistance = 14, -- how close it creeps to a group it can't catch
+		lingerTime = 45, -- seconds it stays out before slipping away
+		respawnDelay = { 18, 32 },
+		revealCooldown = 30, -- seconds away after a handshake exposes it
+		appearDistance = { 35, 75 },
+		pauseAfterCatch = 4,
+		revealStun = 4, -- in the finale a handshake only stuns it
 	},
 	HollowOne = {
 		name = "The Hollow One",

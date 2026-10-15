@@ -11,6 +11,7 @@ GameConfig.Places = {
 	Lobby = 0,
 	Chapter1 = 0,
 	Chapter2 = 0,
+	Chapter3 = 0,
 }
 
 GameConfig.Party = {
@@ -66,6 +67,23 @@ GameConfig.Chapter1 = {
 	ChaseTimeLimit = 120,
 	EndingPhotoHold = 8,
 	ReturnToLobbyDelay = 25,
+}
+
+GameConfig.Chapter3 = {
+	IntroLength = 10,
+	TapeCount = 3,
+	FerryDelay = 20, -- seconds after the signal until the ferry reaches the dock
+	EndingPhotoHold = 8,
+	ReturnToLobbyDelay = 25,
+}
+
+-- The secret handshake (Chapter 3): how players prove they are real.
+GameConfig.Trust = {
+	Range = 12, -- studs: who you can offer a handshake to
+	Window = 4, -- seconds both players have to do it for it to count
+	Cooldown = 1.5,
+	AloneRadius = 26, -- a player with no teammate this close is "alone"
+	TrustedCalm = 12, -- fear removed when a handshake is returned
 }
 
 GameConfig.Chapter2 = {

@@ -18,10 +18,11 @@ Core systems, Chapter 1 greybox, lobby, monetization, saves, accessibility, test
 - Done: the flooded campground, boathouse and lookout tower; whistle story item; torn map pieces; lobby chapter select.
 - Next: art pass for the camp and The Ranger, Ranger voice lines and footsteps, tuning hearing ranges from playtests.
 
-## Phase 4: Chapter 3, "Voices"
+## Phase 4: Chapter 3, "Voices" (built, greybox)
 
-- The Mimic fully active: impersonates players in voice and appearance, can separate the group.
-- Trust mechanics: secret handshakes (emotes) to prove you are real.
+- Done: The Mimic walks as a copy of a player, fakes walkie pings and catches only players who are alone.
+- Done: the secret handshake to prove you are real; Millbrook village, Hale's tapes, the three signals and the ferry finale.
+- Next: walking/idle animations for the copy (it slides on purpose for now), voice lines, a fog art pass.
 
 ## Phase 5: Chapter 4, "The Hollow"
 

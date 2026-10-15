@@ -21,6 +21,8 @@ return {
 		Flare = 0,
 		Helicopter = 0,
 		Padlock = 0,
+		Bell = 0,
+		FerryHorn = 0,
 	},
 	Images = {
 		Logo = 0,

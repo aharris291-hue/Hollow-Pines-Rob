@@ -34,6 +34,7 @@ local EVENTS = {
 	"SetSprinting",
 	"ReturnToLobby",
 	"ReportLook",
+	"Handshake",
 }
 
 local FUNCTIONS = {

@@ -25,6 +25,10 @@ local EVENT_STATS = {
 	MapPieceFound = "MapPiecesFound",
 	HidFromRanger = "HidFromRanger",
 	FlareFired = "FlaresFired",
+	Chapter3Completed = "Chapter3Clears",
+	MimicRevealed = "MimicsRevealed",
+	Handshake = "Handshakes",
+	TapeFound = "TapesFound",
 }
 
 local function check(player: Player)

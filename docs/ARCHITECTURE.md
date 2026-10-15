@@ -7,20 +7,23 @@ default.project.json     Solo: one place, Chapter 1 starts on join (Studio testi
 lobby.project.json       Lobby place
 chapter1.project.json    Chapter 1 place
 chapter2.project.json    Chapter 2 place
+chapter3.project.json    Chapter 3 place
 solo-chapter2.project.json  Solo test place that starts Chapter 2 (SoloChapter = 2)
+solo-chapter3.project.json  Solo test place that starts Chapter 3 (SoloChapter = 3)
 src/
   shared/                ReplicatedStorage.Shared
     Config/              All tuning and content: GameConfig, Chapters, Items, Quests,
                          Achievements, Creatures, Monetization, Assets, DataTemplate
     Util/                Net (remotes), Signal, TableUtil, RateLimit and the pure logic
                          modules FearMath, Progression, QuestLogic, PuzzleCode, Hearing,
-                         ChapterUnlock
+                         ChapterUnlock, Trust
   server/                ServerScriptService.Server
     init.server.luau     Bootstrap: chooses services for the place role, Init then Start
     EventBus.luau        Gameplay facts ("FuseInserted") that quests/achievements listen to
     Services/            One module per system (below)
-    Chapters/            One story module per chapter (Chapter1, Chapter2)
-    Creatures/           Watcher, Mimic, Ranger, Mover (pathfinding), HollowOne (stub)
+    Chapters/            One story module per chapter (Chapter1, Chapter2, Chapter3)
+    Creatures/           Watcher, Mimic, Copy (the Mimic's walking form), Ranger,
+                         Mover (pathfinding), HollowOne (stub)
     World/               Builder helpers and the greybox map for each chapter
   client/                StarterPlayerScripts.Client
     init.client.luau     Bootstrap for controllers
@@ -36,7 +39,7 @@ place ids are filled into `GameConfig.Places`, the server uses `game.PlaceId`
 instead. Roles:
 
 - **Lobby**: common services + `LobbyService`, `MatchmakingService`.
-- **Chapter1**, **Chapter2** and **Solo**: common services + `PlayerStateService`, `EquipmentService`, `NoiseService`, `FearService`, `CreatureService`, `OnboardingService`, `ChapterService`. Solo plays the chapter in the `SoloChapter` attribute (default 1).
+- **Chapter1**, **Chapter2**, **Chapter3** (any `Chapter<N>`) and **Solo**: common services + `PlayerStateService`, `EquipmentService`, `NoiseService`, `TrustService`, `FearService`, `CreatureService`, `OnboardingService`, `ChapterService`. Solo plays the chapter in the `SoloChapter` attribute (default 1).
 
 ## Chapters
 
@@ -48,11 +51,16 @@ provides `buildMap`, `spawns`, `applyLighting`, `run(story)` and `ending(story)`
 `story` is a table of helpers (`setObjective`, `caption`, `waitForPrompt`,
 `expectCode`, `runEscape`...). To add a chapter: a map in `World/`, a module in
 `Chapters/`, an entry in `Config/Chapters.luau`, a place id key in
-`GameConfig.Places` and a Rojo project with that `PlaceRole`.
+`GameConfig.Places` and a Rojo project with that `PlaceRole`. The server maps any
+`Chapter<N>` role or place id to its chapter, so no bootstrap code changes.
 
 `NoiseService` keeps the recent noises (position, radius, time) that The Ranger
 listens to, emits sprint and splash noise, and sets the `Noise` and `Hidden`
 player attributes. The maths lives in `Util/Hearing.luau` so it is unit tested.
+
+`TrustService` handles the secret handshake (the `Handshake` remote) and answers
+"is this player alone?" for the Mimic's copy. The rules (alone radius, handshake
+window, the bell order puzzle) live in `Util/Trust.luau`.
 
 Common services: `DataService`, `EconomyService`, `ProgressionService`,
 `InventoryService`, `MonetizationService`, `QuestService`, `AchievementService`,
