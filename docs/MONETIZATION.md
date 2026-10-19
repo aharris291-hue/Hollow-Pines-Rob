@@ -11,17 +11,17 @@ Built for a young audience, so the rules are strict:
 
 | Key | Suggested price | Grants |
 | --- | --- | --- |
-| `VIP` | 199 R$ | +25% Embers from play, Golden Beam, Ghost Pup pet, VIP attribute for a name tag |
-| `SupporterPack` | 99 R$ | 1,000 Embers once, supporter attribute |
+| `VIP` | 399 R$ | +25% Embers from play, Golden Beam, Ghost Pup pet, VIP attribute for a name tag |
+| `SupporterPack` | 199 R$ | 1,000 Embers once, supporter attribute |
 
 ## Developer products
 
 | Key | Suggested price | Grants |
 | --- | --- | --- |
-| `EmbersSmall` | 49 R$ | 500 Embers |
-| `EmbersMedium` | 99 R$ | 1,200 Embers |
-| `EmbersLarge` | 199 R$ | 3,000 Embers |
-| `SecondWind` | 25 R$ | One self-revive, max once per chapter |
+| `EmbersSmall` | 79 R$ | 500 Embers |
+| `EmbersMedium` | 179 R$ | 1,200 Embers |
+| `EmbersLarge` | 399 R$ | 3,000 Embers |
+| `SecondWind` | 199 R$ | One self-revive, max once per chapter |
 
 ## Setup
 
