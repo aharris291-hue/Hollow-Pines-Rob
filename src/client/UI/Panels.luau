@@ -7,6 +7,7 @@ local SocialService = game:GetService("SocialService")
 
 local Shared = game:GetService("ReplicatedStorage"):WaitForChild("Shared")
 local Monetization = require(Shared.Config.Monetization)
+local Assets = require(Shared.Config.Assets)
 local Chapters = require(Shared.Config.Chapters)
 local ChapterUnlock = require(Shared.Util.ChapterUnlock)
 local BestTimes = require(Shared.Util.BestTimes)
@@ -125,6 +126,7 @@ end
 
 function Panels:Results(result)
 	local frame = self:_modal(420, 320)
+	self.controllers.AudioController:Play(Assets.Sounds.Reward, 0.8)
 	UIKit.text({ Size = UDim2.new(1, 0, 0, 34), Font = Theme.Story, TextSize = 28, TextXAlignment = Enum.TextXAlignment.Center, TextColor3 = Theme.Accent, Text = string.format("Chapter %d complete", result.chapter or 1), Parent = frame })
 	local minutes = math.floor(result.seconds / 60)
 	local lines = {

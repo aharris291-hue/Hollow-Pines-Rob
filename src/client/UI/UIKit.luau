@@ -1,6 +1,9 @@
 -- Tiny declarative helpers for building UI in code, plus the shared theme.
 
+local SoundService = game:GetService("SoundService")
 local TweenService = game:GetService("TweenService")
+
+local Assets = require(game:GetService("ReplicatedStorage"):WaitForChild("Shared").Config.Assets)
 
 local UIKit = {}
 
@@ -95,6 +98,23 @@ function UIKit.text(props)
 	return label
 end
 
+-- A soft click for buttons (Config/Assets UIClick; 0 means silent).
+local clickSound: Sound? = nil
+function UIKit.click()
+	if Assets.Sounds.UIClick == 0 then
+		return
+	end
+	if not clickSound then
+		local sound = Instance.new("Sound")
+		sound.SoundId = "rbxassetid://" .. Assets.Sounds.UIClick
+		sound.Volume = 0.4
+		sound.SoundGroup = SoundService:FindFirstChild("Effects") :: SoundGroup?
+		sound.Parent = SoundService
+		clickSound = sound
+	end
+	(clickSound :: Sound):Play()
+end
+
 function UIKit.button(text: string, props, onClick: () -> ())
 	local button = UIKit.new("TextButton", {
 		Text = text,
@@ -119,7 +139,10 @@ function UIKit.button(text: string, props, onClick: () -> ())
 	button.MouseLeave:Connect(function()
 		TweenService:Create(button, TweenInfo.new(0.12), { BackgroundColor3 = base }):Play()
 	end)
-	button.Activated:Connect(onClick)
+	button.Activated:Connect(function()
+		UIKit.click()
+		onClick()
+	end)
 	button.Parent = props and props.Parent
 	return button
 end

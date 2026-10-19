@@ -163,6 +163,7 @@ function EquipmentService:_activate(player: Player, tool: Tool, itemId: string)
 		if root and services.NoiseService then
 			services.NoiseService:Emit(root.Position, GameConfig.Noise.Whistle, player)
 			EventBus.Fire("WhistleBlown", player)
+			Net.Event("ScreenEffect"):FireAllClients("Whistle", { soundId = Assets.Sounds.Whistle })
 			Net.Event("Caption"):FireAllClients("[" .. player.DisplayName .. " blows a sharp whistle]", "Sound")
 		end
 	elseif itemId == "Camera" then
