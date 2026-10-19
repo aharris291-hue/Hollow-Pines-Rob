@@ -179,6 +179,9 @@ local EFFECTS = {
 		controllers.FearController:Shake(0.15, 2)
 		soundCaption("[Helicopter rotors, getting louder]")
 	end,
+	Whistle = function(payload)
+		controllers.AudioController:Play(payload.soundId, 0.8)
+	end,
 }
 
 local function showPing(from: Player, position: Vector3)
