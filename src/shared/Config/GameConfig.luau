@@ -6,7 +6,8 @@ local GameConfig = {}
 GameConfig.Version = "0.1.0"
 
 -- Place ids are filled in after publishing (see docs/DEPLOYMENT.md).
--- 0 means "not published yet"; matchmaking then runs the chapter in the same server.
+-- Optional: 0 means one-place mode, where the lobby place also runs every chapter
+-- in reserved servers (docs/DEPLOYMENT.md).
 GameConfig.Places = {
 	Lobby = 0,
 	Chapter1 = 0,

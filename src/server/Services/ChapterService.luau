@@ -352,6 +352,18 @@ local function waitForPlayers()
 	end
 end
 
+-- The lobby's place id: set in GameConfig, or this same place in one-place mode
+-- (a reserved server the lobby sent this group to). 0 means there is no lobby.
+local function lobbyPlace(): number
+	if GameConfig.Places.Lobby ~= 0 then
+		return GameConfig.Places.Lobby
+	end
+	if game.PrivateServerId ~= "" and game.PrivateServerOwnerId == 0 then
+		return game.PlaceId
+	end
+	return 0
+end
+
 local function grantRewards()
 	local key = tostring(chapter.id)
 	local elapsed = math.floor(os.clock() - state.startedAt)
@@ -389,7 +401,7 @@ local function grantRewards()
 				seconds = elapsed,
 				personalBest = isBest,
 				best = best,
-				canReturn = GameConfig.Places.Lobby ~= 0,
+				canReturn = lobbyPlace() ~= 0,
 				nextIn = chapter.config.ReturnToLobbyDelay,
 			})
 		end
@@ -424,7 +436,7 @@ local function runChapter()
 end
 
 local function sendAllHome()
-	local lobby = GameConfig.Places.Lobby
+	local lobby = lobbyPlace()
 	if lobby == 0 then
 		return false
 	end
@@ -471,7 +483,7 @@ function ChapterService:Init(registry)
 	end)
 
 	Net.Event("ReturnToLobby").OnServerEvent:Connect(function(player)
-		local lobby = GameConfig.Places.Lobby
+		local lobby = lobbyPlace()
 		if lobby ~= 0 and state.phase == "Ending" then
 			pcall(TeleportService.TeleportAsync, TeleportService, lobby, { player })
 		end

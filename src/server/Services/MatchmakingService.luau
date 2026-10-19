@@ -75,8 +75,12 @@ local function launch(chapterId: number, queue: Queue)
 	local chapter = ChapterUnlock.find(Chapters, chapterId)
 	local placeId = GameConfig.Places[chapter.place] or 0
 	if placeId == 0 then
+		-- One-place mode: a reserved server of this same place runs the chapter.
+		placeId = game.PlaceId
+	end
+	if placeId == 0 then
 		for _, player in group do
-			Net.Event("Toast"):FireClient(player, string.format("Chapter %d place id is not set yet (see docs/DEPLOYMENT.md)", chapterId), "Error")
+			Net.Event("Toast"):FireClient(player, "Groups can only leave for the forest in the published game.", "Info")
 		end
 		queue.launching = false
 		return
