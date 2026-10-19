@@ -5,6 +5,10 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 ReplicatedStorage:WaitForChild("Shared")
 ReplicatedStorage:WaitForChild("Remotes")
+-- The server may still be choosing this server's role (lobby or a chapter).
+while not ReplicatedStorage:GetAttribute("RoleReady") do
+	ReplicatedStorage:GetAttributeChangedSignal("RoleReady"):Wait()
+end
 
 local ORDER = {
 	"DataController",
